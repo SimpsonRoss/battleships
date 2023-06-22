@@ -2,6 +2,13 @@
 const ROWS = 6;
 const COLS = 10;
 
+const COLORS = {
+  '-2': 'green',
+  '-1': 'red',
+  '0': 'lightgrey',
+  '1': 'grey',
+}
+
 
 /*----- state variables -----*/
 let computerBoardArr;
@@ -19,7 +26,8 @@ const playerBoard = document.querySelector('#playerBoard');
 
 
 /*----- event listeners -----*/
-
+computerBoard.addEventListener('click', boardClick);
+//playerBoard.addEventListener('click', boardClick);
 
 
 
@@ -72,41 +80,41 @@ const init = () => {
   render();
 }
 
-// function boardClick(evt) {
-//   // Guards:
-//   // returns without procesing, if someone has won already or it's a tie
-//   if (winner !== null) {
-//     return;
-//   }
-//   // returns if the user clicks on something that isn't one of our 9 divs (a.k.a. the playable board)
-//   if (!evt.target.id.startsWith('c')) {
-//     return;
-//   }
+function boardClick(evt) {
+  // Guards:
+  // returns without procesing, if someone has won already or it's a tie
+  if (winner !== null) {
+    return;
+  }
+  // returns if the user clicks on something that isn't one of our 9 divs (a.k.a. the playable board)
+  if (!evt.target.id.startsWith('c')) {
+    return;
+  }
 
-//   // Split the id string of the div to get the index
-//   const idOfSquare = evt.target.id.split('c')[1].split('r');
-//   const colIdx = parseInt(idOfSquare[0]);
-//   const rowIdx = parseInt(idOfSquare[1]);
+  // Split the id string of the div to get the index
+  const idOfSquare = evt.target.id.split('c')[1].split('r');
+  console.log("click");
+  console.log(idOfSquare);
+  const colIdx = parseInt(idOfSquare[0]);
+  const rowIdx = parseInt(idOfSquare[1]);
 
-//   //assigning the turn value to that square of the board
-//   board[colIdx][rowIdx] = turn;
+  //changing the value of the bombed square depending on it's original state
+  computerBoardArr[colIdx][rowIdx] = -2;
+  // ^^^^ Temp assigning this as -3 until I can figure out the algorithm
 
-//   // Switch player turn
-//   turn *= -1;
-//   // Check for winner
-//   winner = getWinner(colIdx, rowIdx);
-//   render();
-// }
+  // Switch player turn
+  turn *= -1;
+  //Check for winner
+  //winner = getWinner();
+  render();
+}
+
 
 const generateBoard = (board, rows = ROWS, columns = COLS) => {
   for (let row = 0; row < rows; row++) {
-    //const elRow = document.createElement('div');
-    // elRow.className = 'row';
-    //.appendChild(elRow);
 
     for (let column = 0; column < columns; column++) {
       const elColumn = document.createElement('div');
-      //elColumn.className = 'column';
 
       let columnId = `c${String(column)}`;
       let rowId = `r${String(row)}`;
@@ -115,6 +123,23 @@ const generateBoard = (board, rows = ROWS, columns = COLS) => {
       board.appendChild(elColumn);
     }
   }
+}
+
+const render = () => {
+  //renderSquares();
+  //renderMessage();
+  renderBoard();
+
+}
+
+function renderBoard() {
+  computerBoardArr.forEach(function (colArr, colIdx) {
+    colArr.forEach(function (cellVal, rowIdx) {
+      const cellId = `c${colIdx}r${rowIdx}`;
+      const cellEl = document.querySelector(`#${cellId}`);
+      cellEl.style.backgroundColor = `${COLORS[cellVal]}`;
+    })
+  });
 }
 
 init();
