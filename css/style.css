@@ -1,0 +1,51 @@
+* {
+  box-sizing: border-box;
+  /* border: 1px solid red; */
+}
+
+:root {
+  --color-hud: grey;
+  --color-space: black;
+  --color-buttons: darkgrey;
+}
+
+
+body {
+  /* viewport units: vh (viewport height), vw (viewport width), vmin (smallest between vh & vw) */
+  height: 100vh;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  color: whitesmoke;
+}
+
+#computerBoard {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(10, 5vmin);
+  grid-template-rows: repeat(6, 5vmin);
+  gap: .1vmin;
+}
+
+#computerBoard>div {
+  background-color: red;
+}
+
+#playerBoard {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(10, 5vmin);
+  grid-template-rows: repeat(6, 5vmin);
+  gap: .1vmin;
+}
+
+#playerBoard>div {
+  background-color: blue;
+}
+
+#computerBoard>div:hover {
+  background-color: rgba(249, 247, 247, 0.913);
+}
