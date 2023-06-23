@@ -1,28 +1,27 @@
 /*----- constants -----*/
-
 //Call AUDIO.play to trigger this -> const AUDIO = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-simple-countdown-922.mp3');
 const ROWS = 6;
 const COLS = 10;
 
 // An object to store the color values for the player board
 const PLAYERCOLORS = {
-  '-2': 'green',
-  '-1': 'red',
-  '0': 'lightgrey',
-  '1': 'grey',
+  '-2': 'green',      //Safe
+  '-1': 'red',        //Bombed Ship
+  '0': 'lightgrey',   //Empty Square
+  '1': 'grey',        //Healthy Ship
 }
 // An object to store the color values for the computer board, which hides the computer ships
 const COMPCOLORS = {
-  '-2': 'green',
-  '-1': 'red',
-  '0': 'lightgrey',
-  '1': 'lightgrey',
+  '-2': 'green',      //Safe
+  '-1': 'red',        //Bombed Ship
+  '0': 'lightgrey',   //Empty Square
+  '1': 'lightgrey',   //Healthy Ship
 }
 
 // An object to store the player names, incase I want to adjust these
 const TURNS = {
-  player: 'Humanity',
-  computer: 'Alien Race',
+  player: 'Player',
+  computer: 'Computer',
 }
 
 /*----- state variables -----*/
@@ -33,20 +32,16 @@ let playerFleet;
 let turn; // 1 = Players Turn & -1 = Computers Turn 
 let winner; // null = game in play, 1 = Player Wins, -1 = Computer Wins
 
-
 /*----- cached elements  -----*/
 const computerBoard = document.querySelector('#computerBoard');
 const playerBoard = document.querySelector('#playerBoard');
 const messageEl = document.querySelector('#messageBar');
 
-
 /*----- event listeners -----*/
 computerBoard.addEventListener('click', boardClick);
 //playerBoard.addEventListener('click', boardClick);
 
-
 /*----- functions -----*/
-
 function init() {
 
   computerBoardArr = [
@@ -97,7 +92,6 @@ function init() {
   render();
 }
 
-
 function boardClick(evt) {
   // Guards:
   // returns without processing, if someone has won already or it's a tie
@@ -115,21 +109,15 @@ function boardClick(evt) {
     turn *= -1; // Switch to computer's turn
   }
 
-  // On computer's turn, interact with player's board
-  // This is the old section for when I could click for both the player or computer
-  // if (turn === -1 && evt.target.id.startsWith('P')) {
-
-  //   playerBoardArr[colIdx][rowIdx] -= 2;
-  //   turn *= -1; // Switch to player's turn
-  // }
-
   //Check for winner
   winner = getWinner();
   render();
+  //Trigger the Computer to take it's turn after a 2 second delay
   setTimeout(computerTurnAI, 2000);
 }
 
 function computerTurnAI() {
+  // guard to stop the AI from running if the game is over
   if (winner !== null) {
     return
   }
@@ -171,7 +159,6 @@ function render() {
   renderBoard(playerBoardArr, true, PLAYERCOLORS);
 }
 
-
 function renderBoard(boardArr, isPlayerBoard, Colors) {
   // I'm using the prefixes P = player C = computer to amend the ids for each cell div. 
   const prefix = isPlayerBoard ? 'P' : 'C';
@@ -183,7 +170,6 @@ function renderBoard(boardArr, isPlayerBoard, Colors) {
     })
   });
 }
-
 
 function getWinner() {
   // flattens the whole array and then checks if every cell is zero or less 
@@ -276,8 +262,5 @@ function placeShipsOnBoard(fleet, board) {
     }
   });
 }
-
-
-
 
 init();
