@@ -1,7 +1,7 @@
 * {
   box-sizing: border-box;
-  //border: 1px solid red;
-  */
+  /* border: 1px solid red; */
+
 }
 
 :root {
@@ -47,10 +47,21 @@ body {
   background-color: lightgrey;
 }
 
+/* No longer works because of the cells auto updating */
 #computerBoard>div:hover {
-  background-color: rgba(249, 247, 247, 0.913);
+  background-color: rgba(67, 65, 65, 0.913);
+}
+
+
+#gameTitle {
+  font-size: 5vmin;
 }
 
 #messageBar {
+  font-size: 3vmin;
   text-align: center;
+}
+
+#createdBy {
+  font-size: 1.5vmin;
 }
