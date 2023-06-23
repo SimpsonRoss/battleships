@@ -1,7 +1,6 @@
 * {
   box-sizing: border-box;
-  /* border: 1px solid red; */
-
+  border: 1px solid red;
 }
 
 :root {
@@ -10,9 +9,7 @@
   --color-buttons: darkgrey;
 }
 
-
 body {
-  /* viewport units: vh (viewport height), vw (viewport width), vmin (smallest between vh & vw) */
   height: 100vh;
   font-family: sans-serif;
   display: flex;
@@ -23,7 +20,38 @@ body {
   color: whitesmoke;
 }
 
+#header {}
+
+#gameTitle {
+  font-size: 5vmin;
+  text-align: center;
+}
+
+#main {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  grid-template-rows: 1fr;
+  justify-content: center;
+  align-items: center;
+  gap: .5vmin;
+}
+
+#leftPanel {
+  display: flex;
+  flex-direction: column;
+  grid-row: 1 / 2;
+  grid-column: 1 / 2;
+}
+
+#rightPanel {
+  display: grid;
+  grid-row: 1 / 2;
+  grid-column: 2 / 3;
+}
+
 #computerBoard {
+  grid-row: 2 / 3;
+  grid-column: 1 / 2;
   display: grid;
   justify-content: center;
   grid-template-columns: repeat(10, 5vmin);
@@ -31,8 +59,18 @@ body {
   gap: .1vmin;
 }
 
-#computerBoard>div {
+/* #computerBoard>div {
   background-color: lightgrey;
+} */
+
+/* No longer works because of the cells auto updating */
+/* #computerBoard>div:hover {
+  background-color: rgba(67, 65, 65, 0.913);
+} */
+
+#messageBar {
+  font-size: 3vmin;
+  text-align: center;
 }
 
 #playerBoard {
@@ -43,25 +81,13 @@ body {
   gap: .1vmin;
 }
 
-#playerBoard>div {
+/* #playerBoard>div {
   background-color: lightgrey;
-}
+} */
 
-/* No longer works because of the cells auto updating */
-#computerBoard>div:hover {
-  background-color: rgba(67, 65, 65, 0.913);
-}
-
-
-#gameTitle {
-  font-size: 5vmin;
-}
-
-#messageBar {
-  font-size: 3vmin;
-  text-align: center;
-}
+#footer {}
 
 #createdBy {
   font-size: 1.5vmin;
+  text-align: center;
 }
