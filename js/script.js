@@ -42,7 +42,7 @@ const messageEl = document.querySelector('#messageBar');
 
 /*----- event listeners -----*/
 computerBoard.addEventListener('click', boardClick);
-playerBoard.addEventListener('click', boardClick);
+//playerBoard.addEventListener('click', boardClick);
 
 
 /*----- functions -----*/
@@ -116,17 +116,39 @@ function boardClick(evt) {
   }
 
   // On computer's turn, interact with player's board
-  if (turn === -1 && evt.target.id.startsWith('P')) {
-    playerBoardArr[colIdx][rowIdx] -= 2;
-    turn *= -1; // Switch to player's turn
-  }
+  // This is the old section for when I could click for both the player or computer
+  // if (turn === -1 && evt.target.id.startsWith('P')) {
+
+  //   playerBoardArr[colIdx][rowIdx] -= 2;
+  //   turn *= -1; // Switch to player's turn
+  // }
 
   //Check for winner
   winner = getWinner();
   render();
+  setTimeout(computerTurnAI, 2000);
 }
 
-
+function computerTurnAI() {
+  if (winner !== null) {
+    return
+  }
+  if (turn === -1) {
+    //generate a random column and row index
+    const randomRow = Math.floor(Math.random() * playerBoardArr[0].length);
+    const randomCol = Math.floor(Math.random() * playerBoardArr.length);
+    //guard incase the cell is already occupied
+    if (playerBoardArr[randomCol][randomRow] === -1 || playerBoardArr[randomCol][randomRow] === -2) {
+      return computerTurnAI()
+    }
+    console.log(randomCol, randomRow)
+    console.log(playerBoardArr[randomCol][randomRow])
+    playerBoardArr[randomCol][randomRow] -= 2;
+    turn *= -1;
+  }
+  winner = getWinner();
+  render();
+}
 
 function generateBoard(board, isPlayerBoard, rows = ROWS, columns = COLS) {
   for (let row = 0; row < rows; row++) {
@@ -254,6 +276,7 @@ function placeShipsOnBoard(fleet, board) {
     }
   });
 }
+
 
 
 
