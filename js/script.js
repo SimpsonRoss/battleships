@@ -5,14 +5,14 @@ const COLS = 10;
 
 // An object to store the color values for the player board
 const PLAYERCOLORS = {
-  '-2': 'green',      //Safe
+  '-2': 'transparent', //Safe
   '-1': 'red',        //Bombed Ship
   '0': 'lightgrey',   //Empty Square
   '1': 'grey',        //Healthy Ship
 }
 // An object to store the color values for the computer board, which hides the computer ships
 const COMPCOLORS = {
-  '-2': 'green',      //Safe
+  '-2': 'transparent', //Safe
   '-1': 'red',        //Bombed Ship
   '0': 'lightgrey',   //Empty Square
   '1': 'lightgrey',   //Healthy Ship
@@ -20,22 +20,25 @@ const COMPCOLORS = {
 
 // An object to store the player names, incase I want to adjust these
 const TURNS = {
-  player: 'Player',
-  computer: 'Computer',
+  player: 'PLAYER',
+  computer: 'COMPUTER',
 }
 
 /*----- state variables -----*/
 let computerBoardArr;
-let playerBoardArr;
 let computerFleet;
+let computerFleetHealth;
+let playerBoardArr;
 let playerFleet;
+let playerFleetHealth;
 let turn; // 1 = Players Turn & -1 = Computers Turn & 0 = Game not in progress
 let winner; // null = game in play, 1 = Player Wins, -1 = Computer Wins
+
 
 /*----- cached elements  -----*/
 const computerBoard = document.querySelector('#computerBoard');
 const playerBoard = document.querySelector('#playerBoard');
-const messageEl = document.querySelector('#messageBar');
+const messageEl = document.querySelector('#message');
 const startBtn = document.getElementById('start');
 const shuffleBtn = document.getElementById('shuffle');
 
@@ -67,8 +70,10 @@ function init() {
 
   generateBoard(computerBoard, false);
   generateBoard(playerBoard, true);
-  placeShipsOnBoard(playerFleet, playerBoardArr)
-  placeShipsOnBoard(computerFleet, computerBoardArr)
+  placeShipsOnBoard(playerFleet, playerBoardArr);
+  placeShipsOnBoard(computerFleet, computerBoardArr);
+  computerFleetHealth = 100;
+  playerFleetHealth = 100;
 
   render();
 }
@@ -78,6 +83,8 @@ function startTurns() {
     return
   }
   turn = 1;
+  computerBoard.classList.add('hoverEffect');
+
   console.log('start game!')
   render()
 }
@@ -98,11 +105,20 @@ function boardClick(evt) {
     if (computerBoardArr[colIdx][rowIdx] < 0) {
       console.log('not valid');
       return;
+
+      //MISS
     } else if (computerBoardArr[colIdx][rowIdx] === 0) {
       // If the player doesn't get a hit, switch to computer's turn
+      console.log('player misses')
       turn *= -1
+      computerBoardArr[colIdx][rowIdx] -= 2;
+
+      //HIT
+    } else if (computerBoardArr[colIdx][rowIdx] === 1) {
+      console.log('player gets a hit')
+      computerBoardArr[colIdx][rowIdx] -= 2;
     }
-    computerBoardArr[colIdx][rowIdx] -= 2;
+
   }
 
   //Check for winner
@@ -124,14 +140,20 @@ function computerTurnAI() {
     //guard incase the cell is already occupied
     if (playerBoardArr[randomCol][randomRow] === -1 || playerBoardArr[randomCol][randomRow] === -2) {
       return computerTurnAI()
+
+      //MISS
     } else if (playerBoardArr[randomCol][randomRow] === 0) {
       // If the computer doesn't get a hit, switch to player's turn
       turn *= -1
+      console.log('computer misses')
       playerBoardArr[randomCol][randomRow] -= 2;
       winner = getWinner();
       render();
+
+      //HIT
     } else if (playerBoardArr[randomCol][randomRow] === 1) {
       playerBoardArr[randomCol][randomRow] -= 2;
+      console.log('computer gets a hit')
       winner = getWinner();
       render();
       setTimeout(computerTurnAI, 1500);
@@ -194,19 +216,19 @@ function getWinner() {
     return -1;
   }
   // If we haven't returned yet, there's no winner
-  console.log('game is still in play');
+  //console.log('game is still in play');
   return null;
 }
 
 function renderMessage() {
   if (winner !== null) {
-    messageEl.innerHTML = `${winner === 1 ? TURNS.player : TURNS.computer} Wins!`;
+    messageEl.innerHTML = `${winner === 1 ? TURNS.player : TURNS.computer} WINS!`;
     //scoreBoard.innerHTML = `<strong>SCORES: ${player1}: ${player1Score} | ${player2}: ${player2Score}</strong>`;
     //else, the game is in play
   } else if (turn === 0) {
     return
   } else {
-    messageEl.innerHTML = `${turn === 1 ? TURNS.player : TURNS.computer}'s Turn`;
+    messageEl.innerHTML = `${turn === 1 ? TURNS.player : TURNS.computer}'S TURN`;
     //scoreBoard.innerHTML = `<strong>SCORES: ${player1}: ${player1Score} | ${player2}: ${player2Score}</strong>`;
   }
 };

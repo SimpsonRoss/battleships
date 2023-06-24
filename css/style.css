@@ -23,7 +23,8 @@ body {
 #header {}
 
 #gameTitle {
-  font-size: 5vmin;
+  font-family: 'Bruno Ace SC', cursive;
+  font-size: 6vmin;
   text-align: center;
 }
 
@@ -33,6 +34,8 @@ body {
   justify-content: center;
   align-items: center;
   gap: .5vmin;
+  padding: .5vmin;
+  border: .5vmin outset rgb(110, 239, 240);
 }
 
 #leftPanel {
@@ -43,9 +46,33 @@ body {
 }
 
 #rightPanel {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   grid-row: 1 / 2;
   grid-column: 2 / 3;
+}
+
+#computerDashboard {
+  text-align: center;
+  font-size: 2vmin;
+  font-weight: bold;
+  height: 31vmin;
+  border-radius: 2vmin;
+  color: rgb(110, 239, 240);
+  background-color: rgb(23, 54, 55);
+  border: .5vmin outset rgb(110, 239, 240);
+
+}
+
+#playerDashboard {
+  text-align: center;
+  font-size: 2vmin;
+  font-weight: bold;
+  height: 31vmin;
+  border-radius: 2vmin;
+  color: rgb(110, 239, 240);
+  background-color: rgb(23, 54, 55);
+  border: .5vmin outset rgb(110, 239, 240);
 }
 
 button {
@@ -54,7 +81,7 @@ button {
   margin: .5vmin;
   font-size: 2vmin;
   border-radius: 1vmin;
-  border: 0vmin solid grey;
+  border: .5vmin outset rgb(110, 239, 240);
   color: rgb(86, 187, 190);
   background-color: rgb(34, 80, 81)
 }
@@ -73,14 +100,10 @@ button:hover {
   grid-template-rows: repeat(6, 5vmin);
   gap: .5vmin;
   background-color: rgb(23, 54, 55);
+
 }
 
-/* #computerBoard>div {
-  background-color: lightgrey;
-} */
-
-/* No longer works because of the cells auto updating */
-#computerBoard div:hover {
+.hoverEffect div:hover {
   /* border-radius: 50%; */
   /* -webkit-box-shadow: 5px 5px 16px 0px white; */
   /* box-shadow: .2vmin .3vmin .6vmin 0px rgba(194, 249, 249, 0.761); */
@@ -88,6 +111,16 @@ button:hover {
 }
 
 #messageBar {
+  height: 10vmin;
+  padding: 0;
+  border-radius: 4vmin;
+  color: rgb(110, 239, 240);
+  background-color: rgb(23, 54, 55);
+  margin: .5vmin;
+  border: .5vmin outset rgb(110, 239, 240);
+}
+
+#message {
   font-size: 3vmin;
   text-align: center;
 }
@@ -100,10 +133,6 @@ button:hover {
   gap: .5vmin;
   background-color: rgb(23, 54, 55);
 }
-
-/* #playerBoard>div {
-  background-color: lightgrey;
-} */
 
 #footer {}
 

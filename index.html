@@ -7,7 +7,9 @@
   <title>Battleships</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Open+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet">
+
   <link href="css/style.css" rel="stylesheet" type="text/css" />
   <script defer src="js/script.js"></script>
 </head>
@@ -23,8 +25,8 @@
       <section id="computerBoard">
       </section>
 
-      <section id="alertMessage">
-        <h2 id="messageBar">Welcome to the game</h2>
+      <section id="messageBar">
+        <h2 id="message">WELCOME TO THE GAME</h2>
       </section>
 
       <section id="playerBoard">
@@ -32,10 +34,18 @@
     </section>
 
     <section id="rightPanel">
-
+      <div id="computerDashboard">
+        <h3>COMPUTER:</h3>
+        <p>FLEET HEALTH:</p>
+        <h2>100%</h2>
+      </div>
       <button id="start">START GAME</button>
       <button id="shuffle">SHUFFLE FLEET</button>
-
+      <div id="playerDashboard">
+        <h3>PLAYER:</h3>
+        <p>FLEET HEALTH:</p>
+        <h2>100%</h2>
+      </div>
     </section>
   </main>
 
