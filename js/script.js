@@ -38,6 +38,8 @@ let winner; // null = game in play, 1 = Player Wins, -1 = Computer Wins
 /*----- cached elements  -----*/
 const computerBoard = document.querySelector('#computerBoard');
 const playerBoard = document.querySelector('#playerBoard');
+const computerHealthDisplay = document.getElementById('computerFleetHealth');
+const playerHealthDisplay = document.getElementById('playerFleetHealth');
 const messageEl = document.querySelector('#message');
 const startBtn = document.getElementById('start');
 const shuffleBtn = document.getElementById('shuffle');
@@ -70,6 +72,12 @@ function init() {
 
   generateBoard(computerBoard, false);
   generateBoard(playerBoard, true);
+  Array.from(playerBoard.children).forEach(cell => {
+    cell.classList.remove('horizontalFront', 'horizontalRear', 'verticalFront', 'verticalRear');
+  });
+  Array.from(computerBoard.children).forEach(cell => {
+    cell.classList.remove('horizontalFront', 'horizontalRear', 'verticalFront', 'verticalRear');
+  });
   placeShipsOnBoard(playerFleet, playerBoardArr);
   placeShipsOnBoard(computerFleet, computerBoardArr);
   computerFleetHealth = 100;
@@ -79,6 +87,7 @@ function init() {
 }
 
 function startTurns() {
+  // if (winner === null) {
   if (turn !== 0) {
     return
   }
@@ -86,6 +95,9 @@ function startTurns() {
   computerBoard.classList.add('hoverEffect');
 
   console.log('start game!')
+  // } else {
+  //   init()
+  // }
   render()
 }
 
@@ -117,6 +129,28 @@ function boardClick(evt) {
     } else if (computerBoardArr[colIdx][rowIdx] === 1) {
       console.log('player gets a hit')
       computerBoardArr[colIdx][rowIdx] -= 2;
+      // const cellId = evt.target.id;
+      // console.log(evt.target.id)
+      // const cellEl = document.querySelector(`#${cellId}`);
+      console.log(evt.target.classList)
+      if (evt.target.classList.contains('horizontalFrontTemp')) {
+        evt.target.classList.remove('horizontalFrontTemp');
+        evt.target.classList.add('horizontalFront')
+        console.log('horizontalFront')
+      } else if (evt.target.classList.contains('verticalFrontTemp')) {
+        evt.target.classList.remove('verticalFrontTemp');
+        evt.target.classList.add('verticalFront')
+        console.log('verticalFront')
+      } else if (evt.target.classList.contains('horizontalRearTemp')) {
+        evt.target.classList.remove('horizontalRearTemp');
+        evt.target.classList.add('horizontalRear')
+        console.log('horizontalRear')
+      } else if (evt.target.classList.contains('verticalRearTemp')) {
+        evt.target.classList.remove('verticalRearTemp');
+        evt.target.classList.add('verticalRear')
+        console.log('verticalRear')
+      }
+      computerFleetHealth -= 6;
     }
 
   }
@@ -155,13 +189,12 @@ function computerTurnAI() {
       playerBoardArr[randomCol][randomRow] -= 2;
       console.log('computer gets a hit')
       winner = getWinner();
+      playerFleetHealth -= 6;
       render();
       setTimeout(computerTurnAI, 1500);
+
     }
-
-
   }
-
 }
 
 function createEmptyBoard() {
@@ -186,7 +219,8 @@ function render() {
   renderMessage();
   renderBoard(computerBoardArr, false, COMPCOLORS);
   renderBoard(playerBoardArr, true, PLAYERCOLORS);
-  renderControls()
+  renderControls();
+  renderFleetHealth();
 }
 
 function renderControls() {
@@ -218,6 +252,20 @@ function getWinner() {
   // If we haven't returned yet, there's no winner
   //console.log('game is still in play');
   return null;
+}
+
+// function calculateFleetHealth() {
+
+//   // Idea for being more dynamic -> take the array, flatten it and get it's length. Divide 100 / that length. parse to Int and then subtract from 
+//   computerFleet 
+
+//   render();
+// }
+
+function renderFleetHealth() {
+
+  computerHealthDisplay.innerText = computerFleetHealth > 0 ? `${computerFleetHealth}%` : `0%`;
+  playerHealthDisplay.innerText = playerFleetHealth > 0 ? `${playerFleetHealth}%` : `0%`;
 }
 
 function renderMessage() {
@@ -265,17 +313,32 @@ function canPlaceShip(board, ship, startRow, startCol, direction) {
 // our ship placing function that can amend the board arrays to add the fleet
 function placeShip(board, ship, startRow, startCol, direction) {
   const length = ship.length;
-  // placing a ship horizontally
+
   if (direction === 'h') {
     for (let i = 0; i < length; i++) {
       board[startCol + i][startRow] = ship[i];
+      const cellId = board === playerBoardArr ? `Pc${startCol + i}r${startRow}` : `Cc${startCol + i}r${startRow}`;
+      const cellEl = document.querySelector(`#${cellId}`);
+      if (i === 0) {
+        board === playerBoardArr ? cellEl.classList.add('horizontalFront') : cellEl.classList.add('horizontalFrontTemp');
+      } else if (i === length - 1) {
+        board === playerBoardArr ? cellEl.classList.add('horizontalRear') : cellEl.classList.add('horizontalRearTemp');
+      }
     }
   } else {
     for (let i = 0; i < length; i++) {
       board[startCol][startRow + i] = ship[i];
+      const cellId = board === playerBoardArr ? `Pc${startCol}r${startRow + i}` : `Cc${startCol}r${startRow + i}`;
+      const cellEl = document.querySelector(`#${cellId}`);
+      if (i === 0) {
+        board === playerBoardArr ? cellEl.classList.add('verticalFront') : cellEl.classList.add('verticalFrontTemp');
+      } else if (i === length - 1) {
+        board === playerBoardArr ? cellEl.classList.add('verticalRear') : cellEl.classList.add('verticalRearTemp');
+      }
     }
   }
 }
+
 
 // iterates through the fleet with a forEach, generates a random location and direction
 // calls canPlaceShip to check it's safe, and if so calls placeShip 
@@ -309,11 +372,23 @@ function reshuffleBoards() {
   playerBoardArr = playerBoardArr.map(column => column.map(() => 0));
   computerBoardArr = computerBoardArr.map(column => column.map(() => 0));
 
+  // clear classes from playerBoard
+  Array.from(playerBoard.children).forEach(cell => {
+    cell.classList.remove('horizontalFront', 'horizontalRear', 'verticalFront', 'verticalRear');
+  });
+
+  // clear classes from computerBoard
+  Array.from(computerBoard.children).forEach(cell => {
+    cell.classList.remove('horizontalFront', 'horizontalRear', 'verticalFront', 'verticalRear', 'horizontalFrontTemp', 'horizontalRearTemp', 'verticalFrontTemp', 'verticalRearTemp');
+  });
+
   // randomly place the ships on the board again
   placeShipsOnBoard(playerFleet, playerBoardArr);
   placeShipsOnBoard(computerFleet, computerBoardArr);
 
   render();
 }
+
+
 
 init();

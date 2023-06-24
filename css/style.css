@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  margin: 0;
   /* border: 1px solid red; */
 }
 
@@ -23,6 +24,7 @@ body {
 #header {}
 
 #gameTitle {
+  margin: 1vmin auto;
   font-family: 'Bruno Ace SC', cursive;
   font-size: 6vmin;
   text-align: center;
@@ -33,14 +35,20 @@ body {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: .5vmin;
-  padding: .5vmin;
-  border: .5vmin outset rgb(110, 239, 240);
+  gap: 1vmin;
+
+  /* padding: .5vmin;
+  border: .5vmin outset rgb(110, 239, 240); */
+
+  padding: 1.2vmin;
+  border: .8vmin solid rgb(43, 98, 101);
+  border-radius: 0.4vmin 3vmin 3vmin 0.4vmin;
 }
 
 #leftPanel {
   display: flex;
   flex-direction: column;
+  gap: .5vmin;
   grid-row: 1 / 2;
   grid-column: 1 / 2;
 }
@@ -48,31 +56,64 @@ body {
 #rightPanel {
   display: flex;
   flex-direction: column;
+  gap: .5vmin;
   grid-row: 1 / 2;
   grid-column: 2 / 3;
 }
 
 #computerDashboard {
+  display: flex;
+  flex-direction: column;
   text-align: center;
   font-size: 2vmin;
   font-weight: bold;
-  height: 31vmin;
+  height: 32vmin;
   border-radius: 2vmin;
   color: rgb(110, 239, 240);
   background-color: rgb(23, 54, 55);
   border: .5vmin outset rgb(110, 239, 240);
+}
+
+.weaponButtonsBox {
+  display: flex;
+  flex-direction: column;
+  margin: .5vmin 0;
+}
+
+.shelf {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 
 }
 
+.weaponButton {
+  width: 5.5vmin;
+  height: 5.5vmin;
+  margin-left: 1vmin;
+  margin-right: 2vmin;
+}
+
 #playerDashboard {
+  display: flex;
+  flex-direction: column;
   text-align: center;
   font-size: 2vmin;
   font-weight: bold;
-  height: 31vmin;
+  height: 32vmin;
   border-radius: 2vmin;
   color: rgb(110, 239, 240);
   background-color: rgb(23, 54, 55);
   border: .5vmin outset rgb(110, 239, 240);
+}
+
+
+#computerFleetHealth {
+  font-size: 3vmin;
+}
+
+#playerFleetHealth {
+  font-size: 3vmin;
 }
 
 button {
@@ -111,6 +152,9 @@ button:hover {
 }
 
 #messageBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 10vmin;
   padding: 0;
   border-radius: 4vmin;
@@ -134,9 +178,38 @@ button:hover {
   background-color: rgb(23, 54, 55);
 }
 
-#footer {}
+#footer {
+  margin-top: 2vmin;
+}
 
 #createdBy {
   font-size: 1.5vmin;
   text-align: center;
 }
+
+/* VISIBLE */
+.horizontalFront {
+  border-radius: 60% 0 0 60%;
+}
+
+.horizontalRear {
+  border-radius: 0 30% 30% 0;
+}
+
+.verticalFront {
+  border-radius: 60% 60% 0 0;
+}
+
+.verticalRear {
+  border-radius: 0 0 30% 30%;
+}
+
+/* INVISIBLE */
+
+.horizontalFrontTemp {}
+
+.horizontalRearTemp {}
+
+.verticalFrontTemp {}
+
+.verticalRearTemp {}

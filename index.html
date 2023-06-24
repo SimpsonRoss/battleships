@@ -16,7 +16,7 @@
 
 <body>
   <header id="header">
-    <h1 id="gameTitle">BATTLESHIPS</h1>
+    <h1 id="gameTitle">- BATTLESHIPS -</h1>
   </header>
 
   <main id="main">
@@ -26,7 +26,7 @@
       </section>
 
       <section id="messageBar">
-        <h2 id="message">WELCOME TO THE GAME</h2>
+        <h2 id="message">WELCOME TO YOUR DOOM</h2>
       </section>
 
       <section id="playerBoard">
@@ -37,14 +37,44 @@
       <div id="computerDashboard">
         <h3>COMPUTER:</h3>
         <p>FLEET HEALTH:</p>
-        <h2>100%</h2>
+        <p class="fleetHealth" id="computerFleetHealth">100%</p>
+        <div class="weaponButtonsBox">
+          <div class="shelf">
+            <button class="weaponButton" id="compWeapon-1">X</button>
+            <p>CANON</p>
+          </div>
+          <div class="shelf">
+            <button class="weaponButton" id="compWeapon-2">X</button>
+            <p>LASER</p>
+          </div>
+          <div class="shelf">
+            <button class="weaponButton" id="compWeapon-3">X</button>
+            <p>RAIL-GUN</p>
+          </div>
+        </div>
       </div>
+
       <button id="start">START GAME</button>
       <button id="shuffle">SHUFFLE FLEET</button>
+
       <div id="playerDashboard">
         <h3>PLAYER:</h3>
         <p>FLEET HEALTH:</p>
-        <h2>100%</h2>
+        <p class="fleetHealth" id="playerFleetHealth">100%</p>
+        <div class="weaponButtonsBox">
+          <div class="shelf">
+            <button class="weaponButton" id="playerWeapon-1">X</button>
+            <p>CANON</p>
+          </div>
+          <div class="shelf">
+            <button class="weaponButton" id="playerWeapon-2">X</button>
+            <p>LASER</p>
+          </div>
+          <div class="shelf">
+            <button class="weaponButton" id="playerWeapon-3">X</button>
+            <p>RAIL-GUN</p>
+          </div>
+        </div>
       </div>
     </section>
   </main>
