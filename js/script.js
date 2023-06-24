@@ -29,45 +29,27 @@ let computerBoardArr;
 let playerBoardArr;
 let computerFleet;
 let playerFleet;
-let turn; // 1 = Players Turn & -1 = Computers Turn 
+let turn; // 1 = Players Turn & -1 = Computers Turn & 0 = Game not in progress
 let winner; // null = game in play, 1 = Player Wins, -1 = Computer Wins
 
 /*----- cached elements  -----*/
 const computerBoard = document.querySelector('#computerBoard');
 const playerBoard = document.querySelector('#playerBoard');
 const messageEl = document.querySelector('#messageBar');
+const startBtn = document.getElementById('start');
+const shuffleBtn = document.getElementById('shuffle');
 
 /*----- event listeners -----*/
 computerBoard.addEventListener('click', boardClick);
-//playerBoard.addEventListener('click', boardClick);
+startBtn.addEventListener('click', startTurns);
+shuffleBtn.addEventListener('click', reshuffleBoards);
 
 /*----- functions -----*/
 function init() {
-
-  computerBoardArr = [
-    [0, 0, 0, 0, 0, 0], //col 0
-    [0, 0, 0, 0, 0, 0], //col 1
-    [0, 0, 0, 0, 0, 0], //col 2
-    [0, 0, 0, 0, 0, 0], //col 3
-    [0, 0, 0, 0, 0, 0], //col 4
-    [0, 0, 0, 0, 0, 0], //col 5
-    [0, 0, 0, 0, 0, 0], //col 6
-    [0, 0, 0, 0, 0, 0], //col 7
-    [0, 0, 0, 0, 0, 0], //col 8
-    [0, 0, 0, 0, 0, 0], //col 9
-  ];
-  playerBoardArr = [
-    [0, 0, 0, 0, 0, 0], //col 0
-    [0, 0, 0, 0, 0, 0], //col 1
-    [0, 0, 0, 0, 0, 0], //col 2
-    [0, 0, 0, 0, 0, 0], //col 3
-    [0, 0, 0, 0, 0, 0], //col 4
-    [0, 0, 0, 0, 0, 0], //col 5
-    [0, 0, 0, 0, 0, 0], //col 6
-    [0, 0, 0, 0, 0, 0], //col 7
-    [0, 0, 0, 0, 0, 0], //col 8
-    [0, 0, 0, 0, 0, 0], //col 9
-  ];
+  turn = 0;
+  winner = null;
+  computerBoardArr = createEmptyBoard();
+  playerBoardArr = createEmptyBoard();
   computerFleet = [
     [1, 1, 1, 1, 1], //xl-ship
     [1, 1, 1, 1],    //l-ship
@@ -87,15 +69,23 @@ function init() {
   generateBoard(playerBoard, true);
   placeShipsOnBoard(playerFleet, playerBoardArr)
   placeShipsOnBoard(computerFleet, computerBoardArr)
-  turn = 1;
-  winner = null;
+
   render();
+}
+
+function startTurns() {
+  if (turn !== 0) {
+    return
+  }
+  turn = 1;
+  console.log('start game!')
+  render()
 }
 
 function boardClick(evt) {
   // Guards:
   // returns without processing, if someone has won already or it's a tie
-  if (winner !== null) {
+  if (winner !== null || turn === 0) {
     return;
   }
 
@@ -105,8 +95,14 @@ function boardClick(evt) {
 
   // On player's turn, interact with computer's board
   if (turn === 1 && evt.target.id.startsWith('C')) {
+    if (computerBoardArr[colIdx][rowIdx] < 0) {
+      console.log('not valid');
+      return;
+    } else if (computerBoardArr[colIdx][rowIdx] === 0) {
+      // If the player doesn't get a hit, switch to computer's turn
+      turn *= -1
+    }
     computerBoardArr[colIdx][rowIdx] -= 2;
-    turn *= -1; // Switch to computer's turn
   }
 
   //Check for winner
@@ -128,21 +124,32 @@ function computerTurnAI() {
     //guard incase the cell is already occupied
     if (playerBoardArr[randomCol][randomRow] === -1 || playerBoardArr[randomCol][randomRow] === -2) {
       return computerTurnAI()
+    } else if (playerBoardArr[randomCol][randomRow] === 0) {
+      // If the computer doesn't get a hit, switch to player's turn
+      turn *= -1
+      playerBoardArr[randomCol][randomRow] -= 2;
+      winner = getWinner();
+      render();
+    } else if (playerBoardArr[randomCol][randomRow] === 1) {
+      playerBoardArr[randomCol][randomRow] -= 2;
+      winner = getWinner();
+      render();
+      setTimeout(computerTurnAI, 1500);
     }
-    console.log(randomCol, randomRow)
-    console.log(playerBoardArr[randomCol][randomRow])
-    playerBoardArr[randomCol][randomRow] -= 2;
-    turn *= -1;
+
+
   }
-  winner = getWinner();
-  render();
+
+}
+
+function createEmptyBoard() {
+  return Array(COLS).fill(null).map(() => Array(ROWS).fill(0));
 }
 
 function generateBoard(board, isPlayerBoard, rows = ROWS, columns = COLS) {
   for (let row = 0; row < rows; row++) {
     for (let column = 0; column < columns; column++) {
       const elColumn = document.createElement('div');
-
       let prefix = isPlayerBoard ? 'P' : 'C';
       let columnId = `${prefix}c${String(column)}`;
       let rowId = `r${String(row)}`;
@@ -157,6 +164,11 @@ function render() {
   renderMessage();
   renderBoard(computerBoardArr, false, COMPCOLORS);
   renderBoard(playerBoardArr, true, PLAYERCOLORS);
+  renderControls()
+}
+
+function renderControls() {
+  startBtn.innerText = winner ? 'PLAY AGAIN' : 'START GAME';
 }
 
 function renderBoard(boardArr, isPlayerBoard, Colors) {
@@ -191,6 +203,8 @@ function renderMessage() {
     messageEl.innerHTML = `${winner === 1 ? TURNS.player : TURNS.computer} Wins!`;
     //scoreBoard.innerHTML = `<strong>SCORES: ${player1}: ${player1Score} | ${player2}: ${player2Score}</strong>`;
     //else, the game is in play
+  } else if (turn === 0) {
+    return
   } else {
     messageEl.innerHTML = `${turn === 1 ? TURNS.player : TURNS.computer}'s Turn`;
     //scoreBoard.innerHTML = `<strong>SCORES: ${player1}: ${player1Score} | ${player2}: ${player2Score}</strong>`;
@@ -261,6 +275,23 @@ function placeShipsOnBoard(fleet, board) {
       }
     }
   });
+}
+
+function reshuffleBoards() {
+  // guard to stop players from reshuffling mid game
+  if (turn !== 0) {
+    return
+  }
+  // really we only need the player board to be shuffled, but for now I'll do both incase I change the functionality of the game
+  // reset both game boards back to empty by nesting a row map inside a column map
+  playerBoardArr = playerBoardArr.map(column => column.map(() => 0));
+  computerBoardArr = computerBoardArr.map(column => column.map(() => 0));
+
+  // randomly place the ships on the board again
+  placeShipsOnBoard(playerFleet, playerBoardArr);
+  placeShipsOnBoard(computerFleet, computerBoardArr);
+
+  render();
 }
 
 init();

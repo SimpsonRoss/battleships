@@ -17,7 +17,7 @@ body {
   justify-content: center;
   align-items: center;
   background-color: black;
-  color: whitesmoke;
+  color: rgb(101, 231, 233);
 }
 
 #header {}
@@ -51,26 +51,28 @@ body {
 button {
   width: 20vmin;
   padding: 1vmin;
-  font-size: 2vmin;
-  border-radius: 4vmin;
-  border: 0.1vmin solid grey;
-  color: grey;
   margin: .5vmin;
+  font-size: 2vmin;
+  border-radius: 1vmin;
+  border: 0vmin solid grey;
+  color: rgb(86, 187, 190);
+  background-color: rgb(34, 80, 81)
 }
 
 button:hover {
-  color: white;
-  background-color: darkgray;
+  color: rgb(23, 54, 55);
+  background-color: rgb(110, 239, 240);
 }
 
 #computerBoard {
-  grid-row: 2 / 3;
-  grid-column: 1 / 2;
+  /* grid-row: 2 / 3;
+  grid-column: 1 / 2; */
   display: grid;
   justify-content: center;
   grid-template-columns: repeat(10, 5vmin);
   grid-template-rows: repeat(6, 5vmin);
-  gap: .1vmin;
+  gap: .5vmin;
+  background-color: rgb(23, 54, 55);
 }
 
 /* #computerBoard>div {
@@ -78,9 +80,12 @@ button:hover {
 } */
 
 /* No longer works because of the cells auto updating */
-/* #computerBoard>div:hover {
-  background-color: rgba(67, 65, 65, 0.913);
-} */
+#computerBoard div:hover {
+  /* border-radius: 50%; */
+  /* -webkit-box-shadow: 5px 5px 16px 0px white; */
+  /* box-shadow: .2vmin .3vmin .6vmin 0px rgba(194, 249, 249, 0.761); */
+  border: .5vmin inset rgba(194, 249, 249, 0.761);
+}
 
 #messageBar {
   font-size: 3vmin;
@@ -92,7 +97,8 @@ button:hover {
   justify-content: center;
   grid-template-columns: repeat(10, 5vmin);
   grid-template-rows: repeat(6, 5vmin);
-  gap: .1vmin;
+  gap: .5vmin;
+  background-color: rgb(23, 54, 55);
 }
 
 /* #playerBoard>div {
