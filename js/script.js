@@ -21,8 +21,8 @@ const COMPCOLORS = {
 
 // An object to store the player names, incase I want to adjust these
 const TURNS = {
-  player: 'PLAYER',
-  computer: 'COMPUTER',
+  player: 'Player',
+  computer: 'Computer',
 }
 
 /*----- state variables -----*/
@@ -94,8 +94,6 @@ function init() {
   render();
 }
 
-
-
 function startTurns() {
   // if the game is not in progress, start it
   if (turn === 0) {
@@ -105,6 +103,7 @@ function startTurns() {
   } else if (winner !== null) { // if the game has ended, reset it
     init();
     console.log('reset game!')
+    messageEl.innerText = "Return at your peril"
   }
   render();
 }
@@ -282,13 +281,13 @@ function renderFleetHealth() {
 
 function renderMessage() {
   if (winner !== null) {
-    messageEl.innerHTML = `${winner === 1 ? TURNS.player : TURNS.computer} WINS!`;
+    messageEl.innerHTML = `${winner === 1 ? TURNS.player : TURNS.computer} wins!!!`;
     //scoreBoard.innerHTML = `<strong>SCORES: ${player1}: ${player1Score} | ${player2}: ${player2Score}</strong>`;
     //else, the game is in play
   } else if (turn === 0) {
     return
   } else {
-    messageEl.innerHTML = `${turn === 1 ? TURNS.player : TURNS.computer}'S TURN`;
+    messageEl.innerHTML = `${turn === 1 ? TURNS.player : TURNS.computer}'s turn`;
     //scoreBoard.innerHTML = `<strong>SCORES: ${player1}: ${player1Score} | ${player2}: ${player2Score}</strong>`;
   }
 };

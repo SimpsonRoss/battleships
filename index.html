@@ -5,9 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Battleships</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Open+Sans:wght@300;400;500&display=swap"
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Open+Sans:wght@300;400;500&display=swap"
     rel="stylesheet">
 
   <link href="css/style.css" rel="stylesheet" type="text/css" />
@@ -26,7 +28,7 @@
       </section>
 
       <section id="messageBar">
-        <h2 id="message">WELCOME TO YOUR DOOM</h2>
+        <h2 id="message">Welcome to your doom...</h2>
       </section>
 
       <section class="board" id="playerBoard">
@@ -35,21 +37,27 @@
 
     <section id="rightPanel">
       <div id="computerDashboard">
-        <h3>COMPUTER:</h3>
+        <h3 class="playerNames">COMPUTER</h3>
         <p>FLEET HEALTH:</p>
         <p class="fleetHealth" id="computerFleetHealth">100%</p>
         <div class="weaponButtonsBox">
           <div class="shelf">
-            <button class="weaponButton" id="compWeapon-1">X</button>
+            <button class="weaponButton" id="compWeapon-1">
+              <img class="buttonImages" src="images/canon.png">
+            </button>
             <p>CANON</p>
           </div>
           <div class="shelf">
-            <button class="weaponButton" id="compWeapon-2">X</button>
+            <button class="weaponButton" id="compWeapon-2">
+              <img class="buttonImages" src="images/laser.png">
+            </button>
             <p>LASER</p>
           </div>
           <div class="shelf">
-            <button class="weaponButton" id="compWeapon-3">X</button>
-            <p>RAIL-GUN</p>
+            <button class="weaponButton" id="compWeapon-3">
+              <img class="buttonImages" src="images/nuke.png">
+            </button>
+            <p>NUKE</p>
           </div>
         </div>
       </div>
@@ -58,21 +66,27 @@
       <button id="shuffle">SHUFFLE FLEET</button>
 
       <div id="playerDashboard">
-        <h3>PLAYER:</h3>
+        <h3 class="playerNames">PLAYER</h3>
         <p>FLEET HEALTH:</p>
         <p class="fleetHealth" id="playerFleetHealth">100%</p>
         <div class="weaponButtonsBox">
           <div class="shelf">
-            <button class="weaponButton" id="playerWeapon-1">X</button>
+            <button class="weaponButton" id="playerWeapon-1">
+              <img class="buttonImages" src="images/canon.png">
+            </button>
             <p>CANON</p>
           </div>
           <div class="shelf">
-            <button class="weaponButton" id="playerWeapon-2">X</button>
+            <button class="weaponButton" id="playerWeapon-2">
+              <img class="buttonImages" src="images/laser.png">
+            </button>
             <p>LASER</p>
           </div>
           <div class="shelf">
-            <button class="weaponButton" id="playerWeapon-3">X</button>
-            <p>RAIL-GUN</p>
+            <button class="weaponButton" id="playerWeapon-3">
+              <img class="buttonImages" src="images/nuke.png">
+            </button>
+            <p>NUKE</p>
           </div>
         </div>
       </div>
