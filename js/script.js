@@ -2,20 +2,21 @@
 //Call AUDIO.play to trigger this -> const AUDIO = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-simple-countdown-922.mp3');
 const ROWS = 6;
 const COLS = 10;
+const AI_DELAY = 3000; //the time delay for the AI to take its turn 
 
 // An object to store the color values for the player board
 const PLAYERCOLORS = {
   '-2': 'transparent', //Safe
   '-1': 'red',        //Bombed Ship
-  '0': 'lightgrey',   //Empty Square
+  '0': 'honeydew',   //Empty Square
   '1': 'grey',        //Healthy Ship
 }
 // An object to store the color values for the computer board, which hides the computer ships
 const COMPCOLORS = {
   '-2': 'transparent', //Safe
   '-1': 'red',        //Bombed Ship
-  '0': 'lightgrey',   //Empty Square
-  '1': 'lightgrey',   //Healthy Ship
+  '0': 'honeydew',   //Empty Square
+  '1': 'honeydew',   //Healthy Ship
 }
 
 // An object to store the player names, incase I want to adjust these
@@ -51,6 +52,13 @@ shuffleBtn.addEventListener('click', reshuffleBoards);
 
 /*----- functions -----*/
 function init() {
+  // clearing both boards
+  while (computerBoard.firstChild) {
+    computerBoard.firstChild.remove();
+  }
+  while (playerBoard.firstChild) {
+    playerBoard.firstChild.remove();
+  }
   turn = 0;
   winner = null;
   computerBoardArr = createEmptyBoard();
@@ -86,20 +94,21 @@ function init() {
   render();
 }
 
-function startTurns() {
-  // if (winner === null) {
-  if (turn !== 0) {
-    return
-  }
-  turn = 1;
-  computerBoard.classList.add('hoverEffect');
 
-  console.log('start game!')
-  // } else {
-  //   init()
-  // }
-  render()
+
+function startTurns() {
+  // if the game is not in progress, start it
+  if (turn === 0) {
+    turn = 1;
+    computerBoard.classList.add('hoverEffect');
+    console.log('start game!')
+  } else if (winner !== null) { // if the game has ended, reset it
+    init();
+    console.log('reset game!')
+  }
+  render();
 }
+
 
 function boardClick(evt) {
   // Guards:
@@ -129,26 +138,16 @@ function boardClick(evt) {
     } else if (computerBoardArr[colIdx][rowIdx] === 1) {
       console.log('player gets a hit')
       computerBoardArr[colIdx][rowIdx] -= 2;
-      // const cellId = evt.target.id;
-      // console.log(evt.target.id)
-      // const cellEl = document.querySelector(`#${cellId}`);
       console.log(evt.target.classList)
+
       if (evt.target.classList.contains('horizontalFrontTemp')) {
-        evt.target.classList.remove('horizontalFrontTemp');
-        evt.target.classList.add('horizontalFront')
-        console.log('horizontalFront')
+        evt.target.classList.replace('horizontalFrontTemp', 'horizontalFront');
       } else if (evt.target.classList.contains('verticalFrontTemp')) {
-        evt.target.classList.remove('verticalFrontTemp');
-        evt.target.classList.add('verticalFront')
-        console.log('verticalFront')
+        evt.target.classList.replace('verticalFrontTemp', 'verticalFront');
       } else if (evt.target.classList.contains('horizontalRearTemp')) {
-        evt.target.classList.remove('horizontalRearTemp');
-        evt.target.classList.add('horizontalRear')
-        console.log('horizontalRear')
+        evt.target.classList.replace('horizontalRearTemp', 'horizontalRear');
       } else if (evt.target.classList.contains('verticalRearTemp')) {
-        evt.target.classList.remove('verticalRearTemp');
-        evt.target.classList.add('verticalRear')
-        console.log('verticalRear')
+        evt.target.classList.replace('verticalRearTemp', 'verticalRear');
       }
       computerFleetHealth -= 6;
     }
@@ -158,8 +157,8 @@ function boardClick(evt) {
   //Check for winner
   winner = getWinner();
   render();
-  //Trigger the Computer to take it's turn after a 2 second delay
-  setTimeout(computerTurnAI, 2000);
+  //Trigger the Computer to take it's turn after a 2.5 second delay
+  setTimeout(computerTurnAI, AI_DELAY);
 }
 
 function computerTurnAI() {
@@ -191,7 +190,7 @@ function computerTurnAI() {
       winner = getWinner();
       playerFleetHealth -= 6;
       render();
-      setTimeout(computerTurnAI, 1500);
+      setTimeout(computerTurnAI, AI_DELAY);
 
     }
   }
@@ -221,6 +220,7 @@ function render() {
   renderBoard(playerBoardArr, true, PLAYERCOLORS);
   renderControls();
   renderFleetHealth();
+  renderTurnIndicator()
 }
 
 function renderControls() {
@@ -262,8 +262,20 @@ function getWinner() {
 //   render();
 // }
 
-function renderFleetHealth() {
+function renderTurnIndicator() {
+  if (turn === 1) {
+    computerBoard.classList.add('computer-active');
+    playerBoard.classList.remove('player-active');
+  } else if (turn === -1) {
+    playerBoard.classList.add('player-active');
+    computerBoard.classList.remove('computer-active');
+  } else {
+    playerBoard.classList.remove('player-active');
+    computerBoard.classList.remove('computer-active');
+  }
+}
 
+function renderFleetHealth() {
   computerHealthDisplay.innerText = computerFleetHealth > 0 ? `${computerFleetHealth}%` : `0%`;
   playerHealthDisplay.innerText = playerFleetHealth > 0 ? `${playerFleetHealth}%` : `0%`;
 }

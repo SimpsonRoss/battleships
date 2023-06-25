@@ -36,10 +36,6 @@ body {
   justify-content: center;
   align-items: center;
   gap: 1vmin;
-
-  /* padding: .5vmin;
-  border: .5vmin outset rgb(110, 239, 240); */
-
   padding: 1.2vmin;
   border: .8vmin solid rgb(43, 98, 101);
   border-radius: 0.4vmin 3vmin 3vmin 0.4vmin;
@@ -84,7 +80,6 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
-
 }
 
 .weaponButton {
@@ -106,7 +101,6 @@ body {
   background-color: rgb(23, 54, 55);
   border: .5vmin outset rgb(110, 239, 240);
 }
-
 
 #computerFleetHealth {
   font-size: 3vmin;
@@ -132,22 +126,7 @@ button:hover {
   background-color: rgb(110, 239, 240);
 }
 
-#computerBoard {
-  /* grid-row: 2 / 3;
-  grid-column: 1 / 2; */
-  display: grid;
-  justify-content: center;
-  grid-template-columns: repeat(10, 5vmin);
-  grid-template-rows: repeat(6, 5vmin);
-  gap: .5vmin;
-  background-color: rgb(23, 54, 55);
-
-}
-
 .hoverEffect div:hover {
-  /* border-radius: 50%; */
-  /* -webkit-box-shadow: 5px 5px 16px 0px white; */
-  /* box-shadow: .2vmin .3vmin .6vmin 0px rgba(194, 249, 249, 0.761); */
   border: .5vmin inset rgba(194, 249, 249, 0.761);
 }
 
@@ -169,13 +148,37 @@ button:hover {
   text-align: center;
 }
 
+#computerBoard {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(10, 5vmin);
+  grid-template-rows: repeat(6, 5vmin);
+  gap: .5vmin;
+  background-color: rgb(14, 32, 33);
+  border-radius: 1vmin;
+}
+
 #playerBoard {
   display: grid;
   justify-content: center;
   grid-template-columns: repeat(10, 5vmin);
   grid-template-rows: repeat(6, 5vmin);
   gap: .5vmin;
-  background-color: rgb(23, 54, 55);
+  background-color: rgb(14, 32, 33);
+  border-radius: 1vmin;
+}
+
+.board {
+  transition: border 0.15s ease-in-out;
+  border: .5vmin solid transparent;
+}
+
+.computer-active {
+  border: .5vmin double rgb(110, 239, 240);
+}
+
+.player-active {
+  border: .5vmin double rgb(110, 239, 240);
 }
 
 #footer {
