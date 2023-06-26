@@ -6,17 +6,19 @@ const AI_DELAY = 3000; //the time delay for the AI to take its turn
 
 // An object to store the color values for the player board
 const PLAYERCOLORS = {
-  '-2': 'transparent', //Safe
-  '-1': 'red',        //Bombed Ship
-  '0': 'honeydew',   //Empty Square
-  '1': 'grey',        //Healthy Ship
+  '-3': 'darkred',         //Sunken
+  '-2': 'rgb(63, 77, 74)', //Safe
+  '-1': 'red',             //Bombed Ship
+  '0': 'honeydew',         //Empty Square
+  '1': 'grey',             //Healthy Ship
 }
 // An object to store the color values for the computer board, which hides the computer ships
 const COMPCOLORS = {
-  '-2': 'transparent', //Safe
-  '-1': 'red',        //Bombed Ship
-  '0': 'honeydew',   //Empty Square
-  '1': 'honeydew',   //Healthy Ship
+  '-3': 'darkred',         //Sunken
+  '-2': 'rgb(63, 77, 74)', //Safe
+  '-1': 'red',             //Bombed Ship
+  '0': 'honeydew',         //Empty Square
+  '1': 'honeydew',         //Healthy Ship
 }
 
 // An object to store the player names, incase I want to adjust these
@@ -80,6 +82,7 @@ function init() {
 
   generateBoard(computerBoard, false);
   generateBoard(playerBoard, true);
+
   Array.from(playerBoard.children).forEach(cell => {
     cell.classList.remove('horizontalFront', 'horizontalRear', 'verticalFront', 'verticalRear');
   });
@@ -94,16 +97,18 @@ function init() {
   render();
 }
 
+
+
 function startTurns() {
   // if the game is not in progress, start it
   if (turn === 0) {
     turn = 1;
     computerBoard.classList.add('hoverEffect');
-    console.log('start game!')
+    //console.log('start game!')
   } else if (winner !== null) { // if the game has ended, reset it
     init();
-    console.log('reset game!')
-    messageEl.innerText = "Return at your peril"
+    //console.log('reset game!')
+    messageEl.innerText = "Return at your peril";
   }
   render();
 }
@@ -117,38 +122,31 @@ function boardClick(evt) {
   }
 
   const idOfSquare = evt.target.id.slice(2).split('r');
+  //console.log(idOfSquare);
   const colIdx = parseInt(idOfSquare[0]);
   const rowIdx = parseInt(idOfSquare[1]);
 
   // On player's turn, interact with computer's board
   if (turn === 1 && evt.target.id.startsWith('C')) {
     if (computerBoardArr[colIdx][rowIdx] < 0) {
-      console.log('not valid');
+      //console.log('not valid');
       return;
 
       //MISS
     } else if (computerBoardArr[colIdx][rowIdx] === 0) {
       // If the player doesn't get a hit, switch to computer's turn
-      console.log('player misses')
+      //console.log('player misses')
       turn *= -1
       computerBoardArr[colIdx][rowIdx] -= 2;
 
       //HIT
     } else if (computerBoardArr[colIdx][rowIdx] === 1) {
-      console.log('player gets a hit')
+      //console.log('player gets a hit')
       computerBoardArr[colIdx][rowIdx] -= 2;
-      console.log(evt.target.classList)
+      //console.log(evt.target.classList)
 
-      if (evt.target.classList.contains('horizontalFrontTemp')) {
-        evt.target.classList.replace('horizontalFrontTemp', 'horizontalFront');
-      } else if (evt.target.classList.contains('verticalFrontTemp')) {
-        evt.target.classList.replace('verticalFrontTemp', 'verticalFront');
-      } else if (evt.target.classList.contains('horizontalRearTemp')) {
-        evt.target.classList.replace('horizontalRearTemp', 'horizontalRear');
-      } else if (evt.target.classList.contains('verticalRearTemp')) {
-        evt.target.classList.replace('verticalRearTemp', 'verticalRear');
-      }
       computerFleetHealth -= 6;
+      checkIfSunk(computerFleet, computerBoardArr)
     }
 
   }
@@ -177,7 +175,7 @@ function computerTurnAI() {
     } else if (playerBoardArr[randomCol][randomRow] === 0) {
       // If the computer doesn't get a hit, switch to player's turn
       turn *= -1
-      console.log('computer misses')
+      //('computer misses')
       playerBoardArr[randomCol][randomRow] -= 2;
       winner = getWinner();
       render();
@@ -185,9 +183,10 @@ function computerTurnAI() {
       //HIT
     } else if (playerBoardArr[randomCol][randomRow] === 1) {
       playerBoardArr[randomCol][randomRow] -= 2;
-      console.log('computer gets a hit')
+      //console.log('computer gets a hit')
       winner = getWinner();
       playerFleetHealth -= 6;
+      checkIfSunk(playerFleet, playerBoardArr)
       render();
       setTimeout(computerTurnAI, AI_DELAY);
 
@@ -242,10 +241,10 @@ function getWinner() {
   // flattens the whole array and then checks if every cell is zero or less 
   // i.e. the board owner has no ships and has lost 
   if (computerBoardArr.flat().every(cell => cell <= 0)) {
-    console.log('humans win');
+    //console.log('humans win');
     return 1;
   } else if (playerBoardArr.flat().every(cell => cell <= 0)) {
-    console.log('aliens win');
+    //console.log('aliens win');
     return -1;
   }
   // If we haven't returned yet, there's no winner
@@ -329,6 +328,7 @@ function placeShip(board, ship, startRow, startCol, direction) {
     for (let i = 0; i < length; i++) {
       board[startCol + i][startRow] = ship[i];
       const cellId = board === playerBoardArr ? `Pc${startCol + i}r${startRow}` : `Cc${startCol + i}r${startRow}`;
+      ship[i] = cellId;
       const cellEl = document.querySelector(`#${cellId}`);
       if (i === 0) {
         board === playerBoardArr ? cellEl.classList.add('horizontalFront') : cellEl.classList.add('horizontalFrontTemp');
@@ -340,6 +340,7 @@ function placeShip(board, ship, startRow, startCol, direction) {
     for (let i = 0; i < length; i++) {
       board[startCol][startRow + i] = ship[i];
       const cellId = board === playerBoardArr ? `Pc${startCol}r${startRow + i}` : `Cc${startCol}r${startRow + i}`;
+      ship[i] = cellId;
       const cellEl = document.querySelector(`#${cellId}`);
       if (i === 0) {
         board === playerBoardArr ? cellEl.classList.add('verticalFront') : cellEl.classList.add('verticalFrontTemp');
@@ -373,6 +374,41 @@ function placeShipsOnBoard(fleet, board) {
   });
 }
 
+function checkIfSunk(fleet, boardArr) {
+  console.log('checking for a sunken ship')
+
+  fleet.forEach(ship => {
+    console.log(`ship: ${ship}`);
+    const shipSunk = ship.every(shipSection => {
+      // creates an array with the column value at 0, and row value at 1
+      const idOfSquare = shipSection.slice(2).split('r');
+      console.log(`id of square: ${idOfSquare}`);
+      console.log(`boardArr square value: ${boardArr[idOfSquare[0]][idOfSquare[1]]}`);
+      return boardArr[idOfSquare[0]][idOfSquare[1]] === -1;
+    })
+    console.log(`shipSunk: ${shipSunk}`);
+
+    if (shipSunk === true) {
+      ship.forEach(shipSection => {
+        const shipDiv = document.getElementById(`${shipSection}`);
+
+        if (shipDiv.classList.contains('horizontalFrontTemp')) {
+          shipDiv.classList.replace('horizontalFrontTemp', 'horizontalFront');
+        } else if (shipDiv.classList.contains('verticalFrontTemp')) {
+          shipDiv.classList.replace('verticalFrontTemp', 'verticalFront');
+        } else if (shipDiv.classList.contains('horizontalRearTemp')) {
+          shipDiv.classList.replace('horizontalRearTemp', 'horizontalRear');
+        } else if (shipDiv.classList.contains('verticalRearTemp')) {
+          shipDiv.classList.replace('verticalRearTemp', 'verticalRear');
+        }
+        const idOfSquare = shipSection.slice(2).split('r');
+        boardArr[idOfSquare[0]][idOfSquare[1]] = '-3';
+      })
+    }
+  })
+  render();
+}
+
 function reshuffleBoards() {
   // guard to stop players from reshuffling mid game
   if (turn !== 0) {
@@ -382,6 +418,21 @@ function reshuffleBoards() {
   // reset both game boards back to empty by nesting a row map inside a column map
   playerBoardArr = playerBoardArr.map(column => column.map(() => 0));
   computerBoardArr = computerBoardArr.map(column => column.map(() => 0));
+
+  computerFleet = [
+    [1, 1, 1, 1, 1], //xl-ship
+    [1, 1, 1, 1],    //l-ship
+    [1, 1, 1],       //md-ship
+    [1, 1, 1],       //md-ship
+    [1, 1],          //sm-ship
+  ];
+  playerFleet = [
+    [1, 1, 1, 1, 1], //xl-ship
+    [1, 1, 1, 1],    //l-ship
+    [1, 1, 1],       //md-ship
+    [1, 1, 1],       //md-ship
+    [1, 1],          //sm-ship
+  ];
 
   // clear classes from playerBoard
   Array.from(playerBoard.children).forEach(cell => {
