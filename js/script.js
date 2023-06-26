@@ -2,7 +2,7 @@
 //Call AUDIO.play to trigger this -> const AUDIO = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-simple-countdown-922.mp3');
 const ROWS = 6;
 const COLS = 10;
-const AI_DELAY = 3000; //the time delay for the AI to take its turn 
+const AI_DELAY = 2000; //the time delay for the AI to take its turn 
 
 // An object to store the color values for the player board
 const PLAYERCOLORS = {
@@ -36,6 +36,7 @@ let playerFleet;
 let playerFleetHealth;
 let turn; // 1 = Players Turn & -1 = Computers Turn & 0 = Game not in progress
 let winner; // null = game in play, 1 = Player Wins, -1 = Computer Wins
+let lastHit;
 
 
 /*----- cached elements  -----*/
@@ -93,11 +94,11 @@ function init() {
   placeShipsOnBoard(computerFleet, computerBoardArr);
   computerFleetHealth = 100;
   playerFleetHealth = 100;
+  lastHit = null;
+  lastDirection = null;
 
   render();
 }
-
-
 
 function startTurns() {
   // if the game is not in progress, start it
@@ -112,7 +113,6 @@ function startTurns() {
   }
   render();
 }
-
 
 function boardClick(evt) {
   // Guards:
@@ -144,7 +144,6 @@ function boardClick(evt) {
       //console.log('player gets a hit')
       computerBoardArr[colIdx][rowIdx] -= 2;
       //console.log(evt.target.classList)
-
       computerFleetHealth -= 6;
       checkIfSunk(computerFleet, computerBoardArr)
     }
@@ -158,39 +157,85 @@ function boardClick(evt) {
   setTimeout(computerTurnAI, AI_DELAY);
 }
 
+
+
+// AI  
 function computerTurnAI() {
   // guard to stop the AI from running if the game is over
   if (winner !== null) {
     return
   }
-  if (turn === -1) {
-    //generate a random column and row index
-    const randomRow = Math.floor(Math.random() * playerBoardArr[0].length);
-    const randomCol = Math.floor(Math.random() * playerBoardArr.length);
-    //guard incase the cell is already occupied
-    if (playerBoardArr[randomCol][randomRow] === -1 || playerBoardArr[randomCol][randomRow] === -2) {
-      return computerTurnAI()
 
-      //MISS
-    } else if (playerBoardArr[randomCol][randomRow] === 0) {
+  console.log(`Lasthit: ${lastHit}`)
+  // creating random variables as a back up
+  let randomRow = Math.floor(Math.random() * playerBoardArr[0].length);
+  let randomCol = Math.floor(Math.random() * playerBoardArr.length);
+
+  // check if it's the computer's turn
+  if (turn === -1) {
+    console.log(`Lasthit is truthy`)
+
+    // If last shot is truthy then target the surrounding cells of the last know hit
+    if (lastHit) {
+      const directions = [
+        [1, 0],  // Right
+        [0, 1],  // Down
+        [-1, 0], // Left
+        [0, -1], // Up
+      ];
+      directions.sort(() => Math.random() - 0.5);
+      const [lastHitCol, lastHitRow] = lastHit;
+
+      for (let i = 0; i < 4; i++) {
+
+        const [colInc, rowInc] = directions[i];
+        const newCol = lastHitCol + colInc;
+        const newRow = lastHitRow + rowInc;
+        if (newCol >= 0 &&
+          newCol < playerBoardArr.length &&
+          newRow >= 0 &&
+          newRow < playerBoardArr[0].length &&
+          playerBoardArr[newCol][newRow] !== -1 &&
+          playerBoardArr[newCol][newRow] !== -2 &&
+          playerBoardArr[newCol][newRow] !== -3) {
+
+          randomCol = newCol;
+          randomRow = newRow;
+          console.log(`found a safe match - newCol: ${newCol} newRow: ${newRow}`)
+          break;
+        } else {
+          console.log(`can't find a safe match nearby`)
+        }
+      }
+    }
+
+    //guard incase the cell is already occupied
+    while (playerBoardArr[randomCol][randomRow] === -1 || playerBoardArr[randomCol][randomRow] === -2 || playerBoardArr[randomCol][randomRow] === -3) {
+      console.log('randomise')
+      randomRow = Math.floor(Math.random() * playerBoardArr[0].length);
+      randomCol = Math.floor(Math.random() * playerBoardArr.length);
+    }
+
+    //MISS
+    if (playerBoardArr[randomCol][randomRow] === 0) {
       // If the computer doesn't get a hit, switch to player's turn
       turn *= -1
-      //('computer misses')
       playerBoardArr[randomCol][randomRow] -= 2;
-      winner = getWinner();
-      render();
-
-      //HIT
-    } else if (playerBoardArr[randomCol][randomRow] === 1) {
-      playerBoardArr[randomCol][randomRow] -= 2;
-      //console.log('computer gets a hit')
-      winner = getWinner();
-      playerFleetHealth -= 6;
-      checkIfSunk(playerFleet, playerBoardArr)
-      render();
-      setTimeout(computerTurnAI, AI_DELAY);
-
+      console.log('miss')
     }
+
+    //HIT
+    else if (playerBoardArr[randomCol][randomRow] === 1) {
+      console.log('hit')
+      playerBoardArr[randomCol][randomRow] -= 2;
+      playerFleetHealth -= 6;
+      // checks if any ship was sunk by the hit, and if so it sets lastHit to null so that the AI can focus elsewhere
+      checkIfSunk(playerFleet, playerBoardArr) ? lastHit = null : lastHit = [randomCol, randomRow];
+      console.log(`last hit from HIT section: ${lastHit}`)
+      setTimeout(computerTurnAI, AI_DELAY);
+    }
+    winner = getWinner();
+    render();
   }
 }
 
@@ -251,14 +296,6 @@ function getWinner() {
   //console.log('game is still in play');
   return null;
 }
-
-// function calculateFleetHealth() {
-
-//   // Idea for being more dynamic -> take the array, flatten it and get it's length. Divide 100 / that length. parse to Int and then subtract from 
-//   computerFleet 
-
-//   render();
-// }
 
 function renderTurnIndicator() {
   if (turn === 1) {
@@ -351,7 +388,6 @@ function placeShip(board, ship, startRow, startCol, direction) {
   }
 }
 
-
 // iterates through the fleet with a forEach, generates a random location and direction
 // calls canPlaceShip to check it's safe, and if so calls placeShip 
 function placeShipsOnBoard(fleet, board) {
@@ -375,18 +411,18 @@ function placeShipsOnBoard(fleet, board) {
 }
 
 function checkIfSunk(fleet, boardArr) {
-  console.log('checking for a sunken ship')
+  //console.log('checking for a sunken ship')
 
   fleet.forEach(ship => {
-    console.log(`ship: ${ship}`);
+    //console.log(`ship: ${ship}`);
     const shipSunk = ship.every(shipSection => {
       // creates an array with the column value at 0, and row value at 1
       const idOfSquare = shipSection.slice(2).split('r');
-      console.log(`id of square: ${idOfSquare}`);
-      console.log(`boardArr square value: ${boardArr[idOfSquare[0]][idOfSquare[1]]}`);
+      //console.log(`id of square: ${idOfSquare}`);
+      //console.log(`boardArr square value: ${boardArr[idOfSquare[0]][idOfSquare[1]]}`);
       return boardArr[idOfSquare[0]][idOfSquare[1]] === -1;
     })
-    console.log(`shipSunk: ${shipSunk}`);
+    //console.log(`shipSunk: ${shipSunk}`);
 
     if (shipSunk === true) {
       ship.forEach(shipSection => {
@@ -402,11 +438,13 @@ function checkIfSunk(fleet, boardArr) {
           shipDiv.classList.replace('verticalRearTemp', 'verticalRear');
         }
         const idOfSquare = shipSection.slice(2).split('r');
-        boardArr[idOfSquare[0]][idOfSquare[1]] = '-3';
+        boardArr[idOfSquare[0]][idOfSquare[1]] = -3;
       })
+      render();
+      return true;
     }
+    return false;
   })
-  render();
 }
 
 function reshuffleBoards() {
@@ -433,24 +471,17 @@ function reshuffleBoards() {
     [1, 1, 1],       //md-ship
     [1, 1],          //sm-ship
   ];
-
   // clear classes from playerBoard
   Array.from(playerBoard.children).forEach(cell => {
     cell.classList.remove('horizontalFront', 'horizontalRear', 'verticalFront', 'verticalRear');
   });
-
   // clear classes from computerBoard
   Array.from(computerBoard.children).forEach(cell => {
     cell.classList.remove('horizontalFront', 'horizontalRear', 'verticalFront', 'verticalRear', 'horizontalFrontTemp', 'horizontalRearTemp', 'verticalFrontTemp', 'verticalRearTemp');
   });
-
   // randomly place the ships on the board again
   placeShipsOnBoard(playerFleet, playerBoardArr);
   placeShipsOnBoard(computerFleet, computerBoardArr);
-
   render();
 }
-
-
-
 init();
