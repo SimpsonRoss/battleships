@@ -37,6 +37,7 @@ let playerFleetHealth;
 let turn; // 1 = Players Turn & -1 = Computers Turn & 0 = Game not in progress
 let winner; // null = game in play, 1 = Player Wins, -1 = Computer Wins
 let lastHit;
+let lastDirection;
 
 
 /*----- cached elements  -----*/
@@ -94,8 +95,8 @@ function init() {
   placeShipsOnBoard(computerFleet, computerBoardArr);
   computerFleetHealth = 100;
   playerFleetHealth = 100;
-  lastHit = null;
-  lastDirection = null;
+  lastHit = [null];
+  lastDirection = [null];
 
   render();
 }
@@ -157,87 +158,158 @@ function boardClick(evt) {
   setTimeout(computerTurnAI, AI_DELAY);
 }
 
+/*----- AI OPPONENT -----*/
 
-
-// AI  
 function computerTurnAI() {
-  // guard to stop the AI from running if the game is over
+  // Guard to stop the AI from running if the game is over
   if (winner !== null) {
-    return
+    return;
   }
 
-  console.log(`Lasthit: ${lastHit}`)
-  // creating random variables as a back up
+
   let randomRow = Math.floor(Math.random() * playerBoardArr[0].length);
   let randomCol = Math.floor(Math.random() * playerBoardArr.length);
 
-  // check if it's the computer's turn
+  // Check if it's the computer's turn
   if (turn === -1) {
-    console.log(`Lasthit is truthy`)
+    console.log(`Computers turn`)
+    console.log(`last hit array: ${lastHit.at(-1)}`);
 
-    // If last shot is truthy then target the surrounding cells of the last know hit
-    if (lastHit) {
+    if (lastHit.at(-1)) {
+      console.log(`Lasthit is truthy`)
+
       const directions = [
         [1, 0],  // Right
         [0, 1],  // Down
         [-1, 0], // Left
         [0, -1], // Up
       ];
-      directions.sort(() => Math.random() - 0.5);
-      const [lastHitCol, lastHitRow] = lastHit;
 
-      for (let i = 0; i < 4; i++) {
 
-        const [colInc, rowInc] = directions[i];
-        const newCol = lastHitCol + colInc;
-        const newRow = lastHitRow + rowInc;
-        if (newCol >= 0 &&
-          newCol < playerBoardArr.length &&
-          newRow >= 0 &&
-          newRow < playerBoardArr[0].length &&
-          playerBoardArr[newCol][newRow] !== -1 &&
-          playerBoardArr[newCol][newRow] !== -2 &&
-          playerBoardArr[newCol][newRow] !== -3) {
+      const [lastHitCol, lastHitRow] = lastHit.at(-1);
+      console.log(`last hit array: ${[lastHitCol, lastHitRow]}`);
 
+      if (lastHit.at(-2) !== null && lastHit.at(-1) !== null && lastHit.length > 1) {
+        console.log(`Generating last Direction`)
+
+        // for (let i = 0; i < 2; i++) {
+        //   console.log(`Calculating ${lastHit.at(-2)} - ${lastHit.at(-1)}`)
+        //   const difference = lastHit.at(-2) - lastHit.at(-1);
+        //   console.log(`Result: ${difference} (direction)`)
+        //   lastDirection.push(difference);
+        // }
+        lastDirection = [];
+        for (let i = 0; i < 2; i++) {
+          console.log(`Calculating ${lastHit[lastHit.length - 1][i]} - ${lastHit[lastHit.length - 2][i]}`);
+          const difference = lastHit[lastHit.length - 1][i] - lastHit[lastHit.length - 2][i];
+          console.log(`Result: ${difference}`);
+          lastDirection.push(difference);
+        }
+        console.log(`Result: ${[lastDirection]} (direction)`);
+
+      }
+
+      const result = directions.some(direction =>
+        direction.length === lastDirection.length && direction.every((value, index) => value === lastDirection[index])
+      );
+
+      console.log(`lastdirection is not null?: ${lastDirection.at(-1) !== null}`)
+      console.log(`lastdirection is a valid direction: ${result}`)
+
+
+      if (lastDirection.at(-1) !== null && result) {
+        console.log('has a last direction')
+        console.log(lastDirection);
+        const [colInc, rowInc] = lastDirection;
+        let newCol = lastHitCol + colInc;
+        let newRow = lastHitRow + rowInc;
+
+        if (isValidCell(newCol, newRow)) {
+          console.log('next in direction is valid');
           randomCol = newCol;
           randomRow = newRow;
-          console.log(`found a safe match - newCol: ${newCol} newRow: ${newRow}`)
-          break;
-        } else {
-          console.log(`can't find a safe match nearby`)
+        }
+
+      } else {
+        console.log('has NO last direction')
+        //randomising directions:
+        directions.sort(() => Math.random() - 0.5);
+        console.log(directions)
+
+
+        for (let i = 0; i < 4; i++) {
+
+          const [colInc, rowInc] = directions[i];
+          const newCol = lastHitCol + colInc;
+          const newRow = lastHitRow + rowInc;
+          console.log(`trying direction ${i}`)
+          console.log(`location ${[newCol, newRow]}`)
+
+          if (isValidCell(newCol, newRow)) {
+            console.log(`found valid cell`)
+            console.log(`newCol: ${newCol} newRow: ${newRow}`);
+            randomRow = newRow;
+            randomCol = newCol;
+
+            break;
+          }
         }
       }
     }
 
-    //guard incase the cell is already occupied
-    while (playerBoardArr[randomCol][randomRow] === -1 || playerBoardArr[randomCol][randomRow] === -2 || playerBoardArr[randomCol][randomRow] === -3) {
-      console.log('randomise')
-      randomRow = Math.floor(Math.random() * playerBoardArr[0].length);
+    while (isValidCell(randomCol, randomRow) === false) {
+      console.log('randomising');
+      // let advantage = Math.random() < 0.5 ? true : false;
+      // if (playerFleetHealth < 30 && advantage === true) {
+      //   randomCol = Math.floor(Math.random() * playerBoardArr.length);
+      //   randomRow = Math.floor(Math.random() * playerBoardArr[0].length);
+      // }
+
       randomCol = Math.floor(Math.random() * playerBoardArr.length);
+      randomRow = Math.floor(Math.random() * playerBoardArr[0].length);
+
     }
 
-    //MISS
     if (playerBoardArr[randomCol][randomRow] === 0) {
-      // If the computer doesn't get a hit, switch to player's turn
-      turn *= -1
+      console.log('miss');
+      turn *= -1;
       playerBoardArr[randomCol][randomRow] -= 2;
-      console.log('miss')
-    }
-
-    //HIT
-    else if (playerBoardArr[randomCol][randomRow] === 1) {
-      console.log('hit')
+      lastDirection = [null];  // Clear last direction on miss
+    } else if (playerBoardArr[randomCol][randomRow] === 1) {
+      console.log('hit');
       playerBoardArr[randomCol][randomRow] -= 2;
       playerFleetHealth -= 6;
-      // checks if any ship was sunk by the hit, and if so it sets lastHit to null so that the AI can focus elsewhere
-      checkIfSunk(playerFleet, playerBoardArr) ? lastHit = null : lastHit = [randomCol, randomRow];
-      console.log(`last hit from HIT section: ${lastHit}`)
+
+      if (checkIfSunk(playerFleet, playerBoardArr)) {
+        console.log('sunk');
+        lastHit.push[null];  // Clear last direction and last hit when a ship is sunk
+      } else {
+        console.log('not sunk');
+        //lastDirection.push(difference)
+        lastHit.push([randomCol, randomRow]); // Save this hit
+      }
+
       setTimeout(computerTurnAI, AI_DELAY);
     }
+
     winner = getWinner();
     render();
   }
 }
+function isValidCell(col, row) {
+  console.log(`checking if ${[col, row]} is valid`)
+  return (
+    col >= 0 &&
+    col < playerBoardArr.length &&
+    row >= 0 &&
+    row < playerBoardArr[0].length &&
+    playerBoardArr[col][row] !== -1 &&
+    playerBoardArr[col][row] !== -2 &&
+    playerBoardArr[col][row] !== -3
+  );
+}
+
+
 
 function createEmptyBoard() {
   return Array(COLS).fill(null).map(() => Array(ROWS).fill(0));
