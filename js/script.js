@@ -38,6 +38,7 @@ let turn; // 1 = Players Turn & -1 = Computers Turn & 0 = Game not in progress
 let winner; // null = game in play, 1 = Player Wins, -1 = Computer Wins
 let lastHit;
 let lastDirection;
+let sunkenLocations = [];
 
 
 /*----- cached elements  -----*/
@@ -179,7 +180,7 @@ function computerTurnAI() {
       console.log(`Lasthit is truthy`)
 
       const directions = [
-        [1, 0],  // Right
+        [1, 0],  // RightMath.floor
         [0, 1],  // Down
         [-1, 0], // Left
         [0, -1], // Up
@@ -240,10 +241,13 @@ function computerTurnAI() {
         for (let i = 0; i < 4; i++) {
 
           const [colInc, rowInc] = directions[i];
+
           const newCol = lastHitCol + colInc;
           const newRow = lastHitRow + rowInc;
-          console.log(`trying direction ${i}`)
-          console.log(`location ${[newCol, newRow]}`)
+          console.log(`trying direction ${i}`);
+          console.log(`lastHitCol ${lastHitCol} + colInc ${colInc}`);
+          console.log(`lastHitCol ${lastHitRow} + colInc ${rowInc}`);
+          console.log(`location ${[newCol, newRow]}`);
 
           if (isValidCell(newCol, newRow)) {
             console.log(`found valid cell`)
@@ -259,14 +263,23 @@ function computerTurnAI() {
 
     while (isValidCell(randomCol, randomRow) === false) {
       console.log('randomising');
-      // let advantage = Math.random() < 0.5 ? true : false;
-      // if (playerFleetHealth < 30 && advantage === true) {
-      //   randomCol = Math.floor(Math.random() * playerBoardArr.length);
-      //   randomRow = Math.floor(Math.random() * playerBoardArr[0].length);
-      // }
 
-      randomCol = Math.floor(Math.random() * playerBoardArr.length);
-      randomRow = Math.floor(Math.random() * playerBoardArr[0].length);
+      //let advantage = Math.random() < 0.5 ? true : false;
+      let advantage = true;
+      if (playerFleetHealth < 80 && advantage === true) {
+        console.log('ADVANTAGE GIVEN!!!!!');
+        // FIND THE REMAINING UNBOMBED PLAYER SHIP LOCATIONS
+        const idOfSquare = findRandomNonSunk()
+        const [unSunkCol, unSunkRow] = idOfSquare;
+
+        randomCol = unSunkCol;
+        randomRow = unSunkRow;
+
+      } else {
+        randomCol = Math.floor(Math.random() * playerBoardArr.length);
+        randomRow = Math.floor(Math.random() * playerBoardArr[0].length);
+
+      }
 
     }
 
@@ -307,6 +320,16 @@ function isValidCell(col, row) {
     playerBoardArr[col][row] !== -2 &&
     playerBoardArr[col][row] !== -3
   );
+}
+
+function findRandomNonSunk() {
+  const nonSunk = playerFleet.flat().filter(location => !sunkenLocations.includes(location));
+  console.log(nonSunk);
+  const randomNonSunk = nonSunk[Math.floor(Math.random() * nonSunk.length)];
+  console.log(randomNonSunk);
+  const idOfSquare = randomNonSunk.slice(2).split('r');
+  console.log(idOfSquare);
+  return idOfSquare
 }
 
 
@@ -499,6 +522,7 @@ function checkIfSunk(fleet, boardArr) {
     if (shipSunk === true) {
       ship.forEach(shipSection => {
         const shipDiv = document.getElementById(`${shipSection}`);
+        sunkenLocations.push(shipSection);
 
         if (shipDiv.classList.contains('horizontalFrontTemp')) {
           shipDiv.classList.replace('horizontalFrontTemp', 'horizontalFront');
