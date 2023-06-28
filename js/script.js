@@ -50,6 +50,7 @@ const messageEl = document.querySelector('#message');
 const startBtn = document.getElementById('start');
 const shuffleBtn = document.getElementById('shuffle');
 
+
 /*----- event listeners -----*/
 computerBoard.addEventListener('click', boardClick);
 startBtn.addEventListener('click', startTurns);
@@ -128,29 +129,106 @@ function boardClick(evt) {
   const colIdx = parseInt(idOfSquare[0]);
   const rowIdx = parseInt(idOfSquare[1]);
 
-  // On player's turn, interact with computer's board
+  //const [colIdx, rowIdx] = evt.target.id.slice(2).split('r');
+
+  /*----- NUKE -----*/
+
   if (turn === 1 && evt.target.id.startsWith('C')) {
-    if (computerBoardArr[colIdx][rowIdx] < 0) {
-      //console.log('not valid');
-      return;
 
-      //MISS
-    } else if (computerBoardArr[colIdx][rowIdx] === 0) {
-      // If the player doesn't get a hit, switch to computer's turn
-      //console.log('player misses')
-      turn *= -1
-      computerBoardArr[colIdx][rowIdx] -= 2;
+    let hitCount = 0; // to count the number of hits
 
-      //HIT
-    } else if (computerBoardArr[colIdx][rowIdx] === 1) {
-      //console.log('player gets a hit')
-      computerBoardArr[colIdx][rowIdx] -= 2;
-      //console.log(evt.target.classList)
-      computerFleetHealth -= 6;
-      checkIfSunk(computerFleet, computerBoardArr)
+    // Calculate the indices of cells around the clicked cell in the pattern
+    const indices = [
+      [colIdx, rowIdx - 2], [colIdx - 1, rowIdx - 1], [colIdx, rowIdx - 1], [colIdx + 1, rowIdx - 1],
+      [colIdx - 2, rowIdx], [colIdx - 1, rowIdx], [colIdx, rowIdx], [colIdx + 1, rowIdx], [colIdx + 2, rowIdx],
+      [colIdx - 1, rowIdx + 1], [colIdx, rowIdx + 1], [colIdx + 1, rowIdx + 1], [colIdx, rowIdx + 2]
+    ];
+
+    // Iterate over each index pair
+    for (let i = 0; i < indices.length; i++) {
+      const [col, row] = indices[i];
+      console.log(col, row)
+      // Check if index pair is valid
+      if (col >= 0 && col < computerBoardArr.length && row >= 0 && row < computerBoardArr[0].length) {
+        // Decrease by 2 for hits
+        if (computerBoardArr[col][row] === 1) {
+          computerBoardArr[col][row] -= 2;
+          hitCount++;
+        }
+        // Decrease by 2 for misses
+        else if (computerBoardArr[col][row] === 0) {
+          computerBoardArr[col][row] -= 2;
+        }
+      }
     }
 
+    turn *= -1;
+    computerFleetHealth -= (6 * hitCount);
+    checkIfSunk(computerFleet, computerBoardArr);
   }
+
+
+
+
+  // /*----- LASER -----*/
+
+  // // On player's turn, interact with computer's board
+  // if (turn === 1 && evt.target.id.startsWith('C')) {
+
+  //   // Find if there are any valid cells in the column to hit
+  //   const validCells = computerBoardArr[colIdx].some(cell => cell >= 0);
+
+  //   if (!validCells) {
+  //     console.log('no empty cells in the column to hit');
+  //     return;
+  //   }
+
+  //   let hitCount = 0; // to count the number of hits
+
+  //   // Modify cells in the column
+  //   computerBoardArr[colIdx] = computerBoardArr[colIdx].map(cell => {
+  //     if (cell === 1) {
+  //       hitCount++;
+  //       return cell - 2; // decrease by 2 for hits
+  //     }
+  //     if (cell === 0) {
+  //       return cell - 2; // decrease by 2 for misses
+  //     }
+  //     return cell; // return cell value unchanged for cells < 0
+  //   });
+
+  //   turn *= -1;
+  //   computerFleetHealth -= (6 * hitCount);
+  //   checkIfSunk(computerFleet, computerBoardArr);
+  // }
+
+
+  // /*----- CANNON -----*/
+
+  //  // On player's turn, interact with computer's board
+  //  if (turn === 1 && evt.target.id.startsWith('C')) {
+  //   if (computerBoardArr[colIdx][rowIdx] < 0) {
+  //     //console.log('not valid');
+  //     return;
+
+  //     //MISS
+  //   } else if (computerBoardArr[colIdx][rowIdx] === 0) {
+  //     // If the player doesn't get a hit, switch to computer's turn
+  //     //console.log('player misses')
+  //     turn *= -1
+  //     computerBoardArr[colIdx][rowIdx] -= 2;
+
+  //     //HIT
+  //   } else if (computerBoardArr[colIdx][rowIdx] === 1) {
+  //     //console.log('player gets a hit')
+  //     computerBoardArr[colIdx][rowIdx] -= 2;
+  //     //console.log(evt.target.classList)
+  //     computerFleetHealth -= 6;
+  //     checkIfSunk(computerFleet, computerBoardArr)
+  //   }
+  // }
+
+  /*----- LASER -----*/
 
   //Check for winner
   winner = getWinner();
@@ -245,8 +323,9 @@ function computerTurnAI() {
           const newCol = lastHitCol + colInc;
           const newRow = lastHitRow + rowInc;
           console.log(`trying direction ${i}`);
+          console.log(`type of lastHitCol ${typeof lastHitCol} + type of colInc ${typeof colInc}`);
           console.log(`lastHitCol ${lastHitCol} + colInc ${colInc}`);
-          console.log(`lastHitCol ${lastHitRow} + colInc ${rowInc}`);
+          console.log(`lastHitRow ${lastHitRow} + rowInc ${rowInc}`);
           console.log(`location ${[newCol, newRow]}`);
 
           if (isValidCell(newCol, newRow)) {
@@ -266,14 +345,14 @@ function computerTurnAI() {
 
       //let advantage = Math.random() < 0.5 ? true : false;
       let advantage = true;
-      if (playerFleetHealth < 80 && advantage === true) {
+      if (playerFleetHealth < 100 && advantage === true) {
         console.log('ADVANTAGE GIVEN!!!!!');
         // FIND THE REMAINING UNBOMBED PLAYER SHIP LOCATIONS
         const idOfSquare = findRandomNonSunk()
         const [unSunkCol, unSunkRow] = idOfSquare;
-
-        randomCol = unSunkCol;
-        randomRow = unSunkRow;
+        console.log(`type of unSunkCol ${typeof unSunkCol} + type of unSunkRow ${typeof unSunkRow}`);
+        randomCol = parseInt(unSunkCol, 10);
+        randomRow = parseInt(unSunkRow, 10);
 
       } else {
         randomCol = Math.floor(Math.random() * playerBoardArr.length);

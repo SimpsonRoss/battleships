@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Battleships</title>
+  <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +17,7 @@
   <script defer src="js/script.js"></script>
 </head>
 
-<body>
+<body background="images/spaceDark.png">
   <header id="header">
     <h1 id="gameTitle">- BATTLESHIPS -</h1>
   </header>
@@ -44,18 +45,21 @@
           <div class="shelf">
             <button class="weaponButton" id="compWeapon-1">
               <img class="buttonImages" src="images/canon.png">
+              <span id="compCannonCounter" class="badge">∞</span>
             </button>
             <p>CANON</p>
           </div>
           <div class="shelf">
             <button class="weaponButton" id="compWeapon-2">
               <img class="buttonImages" src="images/laser.png">
+              <span id="compLaserCounter" class="badge">2</span>
             </button>
             <p>LASER</p>
           </div>
           <div class="shelf">
             <button class="weaponButton" id="compWeapon-3">
               <img class="buttonImages" src="images/nuke.png">
+              <span id="compNukeCounter" class="badge">1</span>
             </button>
             <p>NUKE</p>
           </div>
@@ -73,18 +77,21 @@
           <div class="shelf">
             <button class="weaponButton" id="playerWeapon-1">
               <img class="buttonImages" src="images/canon.png">
+              <span id="playerCannonCounter" class="badge">∞</span>
             </button>
             <p>CANON</p>
           </div>
           <div class="shelf">
             <button class="weaponButton" id="playerWeapon-2">
               <img class="buttonImages" src="images/laser.png">
+              <span id="playerLaserCounter" class="badge">2</span>
             </button>
             <p>LASER</p>
           </div>
           <div class="shelf">
             <button class="weaponButton" id="playerWeapon-3">
               <img class="buttonImages" src="images/nuke.png">
+              <span id="playerNukeCounter" class="badge">1</span>
             </button>
             <p>NUKE</p>
           </div>
@@ -94,7 +101,8 @@
   </main>
 
   <footer id="footer">
-    <p id="createdBy">Created by <a>Ross Simpson</a>
+    <p id="createdBy">Created by <a href="https://github.com/SimpsonRoss" target=”_blank”><strong>Ross
+          Simpson</strong></a>
   </footer>
 
 
