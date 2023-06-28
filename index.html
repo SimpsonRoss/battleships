@@ -29,7 +29,7 @@
       </section>
 
       <section id="messageBar">
-        <h2 id="message">Welcome to your doom...</h2>
+        <h2 id="message">WELCOME TO YOUR DOOM</h2>
       </section>
 
       <section class="board" id="playerBoard">
@@ -41,62 +41,70 @@
         <h3 class="playerNames">COMPUTER</h3>
         <p>FLEET HEALTH:</p>
         <p class="fleetHealth" id="computerFleetHealth">100%</p>
-        <div class="weaponButtonsBox">
-          <div class="shelf">
-            <button class="weaponButton" id="compWeapon-1">
-              <img class="buttonImages" src="images/canon.png">
-              <span id="compCannonCounter" class="badge">∞</span>
-            </button>
-            <p>CANON</p>
-          </div>
-          <div class="shelf">
-            <button class="weaponButton" id="compWeapon-2">
-              <img class="buttonImages" src="images/laser.png">
-              <span id="compLaserCounter" class="badge">2</span>
-            </button>
-            <p>LASER</p>
-          </div>
-          <div class="shelf">
-            <button class="weaponButton" id="compWeapon-3">
-              <img class="buttonImages" src="images/nuke.png">
-              <span id="compNukeCounter" class="badge">1</span>
-            </button>
-            <p>NUKE</p>
-          </div>
-        </div>
       </div>
+      <div id="miscDashboard">
+        <div class="weaponButtonsBox">
 
-      <button id="start">START GAME</button>
-      <button id="shuffle">SHUFFLE FLEET</button>
+          <div class="toolTip">
+
+            <button class="weaponButton" id="playerCannon">
+              <img class="buttonImages" src="images/canon.png">
+              <span id="playerCannonCounter" class="badge">∞</span>
+            </button>
+            <span class="tipText">
+              <p class="toolTipTitle">Cannon:</p>
+              <p class="toolTipBody">Destroys a single cell.</p>
+            </span>
+
+          </div>
+
+
+
+          <div class="toolTip">
+            <button class="weaponButton" id="playerLaser">
+              <img class="buttonImages" src="images/laser.png">
+              <span id="playerLaserCounter" class="badge"></span>
+            </button>
+            <span class="tipText">
+              <p class="toolTipTitle">Laser:</p>
+              <p class="toolTipBody">Destroys a whole column.</p>
+            </span>
+          </div>
+
+
+          <div class="toolTip">
+            <button class="weaponButton" id="playerNuke">
+              <img class="buttonImages" src="images/nuke.png">
+              <span id="playerNukeCounter" class="badge"></span>
+            </button>
+            <span class="tipText">
+              <p class="toolTipTitle">Nuke:</p>
+              <p class="toolTipBody">Destroys a huge radius.</p>
+            </span>
+          </div>
+
+
+        </div>
+
+      </div>
 
       <div id="playerDashboard">
         <h3 class="playerNames">PLAYER</h3>
         <p>FLEET HEALTH:</p>
         <p class="fleetHealth" id="playerFleetHealth">100%</p>
-        <div class="weaponButtonsBox">
-          <div class="shelf">
-            <button class="weaponButton" id="playerWeapon-1">
-              <img class="buttonImages" src="images/canon.png">
-              <span id="playerCannonCounter" class="badge">∞</span>
-            </button>
-            <p>CANON</p>
-          </div>
-          <div class="shelf">
-            <button class="weaponButton" id="playerWeapon-2">
-              <img class="buttonImages" src="images/laser.png">
-              <span id="playerLaserCounter" class="badge">2</span>
-            </button>
-            <p>LASER</p>
-          </div>
-          <div class="shelf">
-            <button class="weaponButton" id="playerWeapon-3">
-              <img class="buttonImages" src="images/nuke.png">
-              <span id="playerNukeCounter" class="badge">1</span>
-            </button>
-            <p>NUKE</p>
-          </div>
-        </div>
+
       </div>
+
+      <button id="start">START GAME</button>
+      <button id="shuffle">SHUFFLE FLEET</button>
+
+
+      <div id="miscDashboardBottom">
+        <img class="alienImage" src="images/alienCut.png">
+
+
+      </div>
+
     </section>
   </main>
 

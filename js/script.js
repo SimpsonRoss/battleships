@@ -23,8 +23,20 @@ const COMPCOLORS = {
 
 // An object to store the player names, incase I want to adjust these
 const TURNS = {
-  player: 'Player',
-  computer: 'Computer',
+  player: 'PLAYER',
+  computer: 'COMPUTER',
+}
+
+const PLAYERWEAPONS = {
+  cannon: '∞',
+  laser: 2,
+  nuke: 0,
+}
+
+const COMPWEAPONS = {
+  cannon: 100,
+  laser: 2,
+  nuke: 0,
 }
 
 /*----- state variables -----*/
@@ -39,22 +51,37 @@ let winner; // null = game in play, 1 = Player Wins, -1 = Computer Wins
 let lastHit;
 let lastDirection;
 let sunkenLocations = [];
+let selectedWeapon;
+let nukesGranted;
+let shuffleFlashing;
+let flashingShuffle;
+let startFlashing;
+let flashingStart;
 
 
 /*----- cached elements  -----*/
-const computerBoard = document.querySelector('#computerBoard');
-const playerBoard = document.querySelector('#playerBoard');
+const computerBoard = document.getElementById('computerBoard');
+const playerBoard = document.getElementById('playerBoard');
 const computerHealthDisplay = document.getElementById('computerFleetHealth');
 const playerHealthDisplay = document.getElementById('playerFleetHealth');
-const messageEl = document.querySelector('#message');
+const messageEl = document.getElementById('message');
 const startBtn = document.getElementById('start');
 const shuffleBtn = document.getElementById('shuffle');
+const cannonCounter = document.getElementById('playerCannonCounter');
+const laserCounter = document.getElementById('playerLaserCounter');
+const nukeCounter = document.getElementById('playerNukeCounter');
+const cannonBtn = document.getElementById('playerCannon');
+const laserBtn = document.getElementById('playerLaser');
+const nukeBtn = document.getElementById('playerNuke');
 
 
 /*----- event listeners -----*/
 computerBoard.addEventListener('click', boardClick);
 startBtn.addEventListener('click', startTurns);
 shuffleBtn.addEventListener('click', reshuffleBoards);
+cannonBtn.addEventListener('click', function () { selectedWeapon = 'CANNON'; render() });
+laserBtn.addEventListener('click', function () { selectedWeapon = 'LASER'; render() });
+nukeBtn.addEventListener('click', function () { selectedWeapon = 'NUKE'; render(); console.log('clickedNuke') });
 
 /*----- functions -----*/
 function init() {
@@ -69,6 +96,8 @@ function init() {
   winner = null;
   computerBoardArr = createEmptyBoard();
   playerBoardArr = createEmptyBoard();
+  selectedWeapon = 'CANNON';
+  nukesGranted = 0;
   computerFleet = [
     [1, 1, 1, 1, 1], //xl-ship
     [1, 1, 1, 1],    //l-ship
@@ -83,6 +112,12 @@ function init() {
     [1, 1, 1],       //md-ship
     [1, 1],          //sm-ship
   ];
+
+  PLAYERWEAPONS.laser = 2;
+  PLAYERWEAPONS.nuke = 0;
+  COMPWEAPONS.laser = 2;
+  COMPWEAPONS.nuke = 0;
+
 
   generateBoard(computerBoard, false);
   generateBoard(playerBoard, true);
@@ -100,11 +135,51 @@ function init() {
   lastHit = [null];
   lastDirection = [null];
 
+
+  setTimeout(miniTutorial, 4000);
+
+
   render();
 }
 
+function miniTutorial() {
+  messageEl.innerHTML = "SHUFFLE AND START -->";
+  flashingShuffle = setInterval(flashShuffleButton, 500);
+  render();
+}
+
+function flashShuffleButton() {
+  shuffleBtn.style.backgroundColor === "rgb(110, 239, 240)" ?
+    shuffleBtn.style.backgroundColor = "" :
+    shuffleBtn.style.backgroundColor = "rgb(110, 239, 240)";
+
+  if (shuffleFlashing === false) {
+    clearInterval(flashingShuffle);
+    shuffleBtn.style.backgroundColor = "";
+    flashingStart = setInterval(flashStartButton, 500);
+  }
+  render();
+}
+
+function flashStartButton() {
+  startBtn.style.backgroundColor === "rgb(110, 239, 240)" ?
+    startBtn.style.backgroundColor = "" :
+    startBtn.style.backgroundColor = "rgb(110, 239, 240)";
+
+  if (startFlashing === false) {
+    clearInterval(flashingStart);
+    startBtn.style.backgroundColor = "";
+  }
+
+  render();
+}
+
+
+
+
 function startTurns() {
   // if the game is not in progress, start it
+  startFlashing = false;
   if (turn === 0) {
     turn = 1;
     computerBoard.classList.add('hoverEffect');
@@ -129,108 +204,116 @@ function boardClick(evt) {
   const colIdx = parseInt(idOfSquare[0]);
   const rowIdx = parseInt(idOfSquare[1]);
 
-  //const [colIdx, rowIdx] = evt.target.id.slice(2).split('r');
-
-  /*----- NUKE -----*/
 
   if (turn === 1 && evt.target.id.startsWith('C')) {
+    if (selectedWeapon === 'CANNON') {
+      /*----- CANNON -----*/
+      if (turn === 1 && evt.target.id.startsWith('C')) {
+        if (computerBoardArr[colIdx][rowIdx] < 0) {
+          //console.log('not valid');
+          return;
 
-    let hitCount = 0; // to count the number of hits
+          //MISS
+        } else if (computerBoardArr[colIdx][rowIdx] === 0) {
+          // If the player doesn't get a hit, switch to computer's turn
+          //console.log('player misses')
+          turn *= -1
+          computerBoardArr[colIdx][rowIdx] -= 2;
 
-    // Calculate the indices of cells around the clicked cell in the pattern
-    const indices = [
-      [colIdx, rowIdx - 2], [colIdx - 1, rowIdx - 1], [colIdx, rowIdx - 1], [colIdx + 1, rowIdx - 1],
-      [colIdx - 2, rowIdx], [colIdx - 1, rowIdx], [colIdx, rowIdx], [colIdx + 1, rowIdx], [colIdx + 2, rowIdx],
-      [colIdx - 1, rowIdx + 1], [colIdx, rowIdx + 1], [colIdx + 1, rowIdx + 1], [colIdx, rowIdx + 2]
-    ];
-
-    // Iterate over each index pair
-    for (let i = 0; i < indices.length; i++) {
-      const [col, row] = indices[i];
-      console.log(col, row)
-      // Check if index pair is valid
-      if (col >= 0 && col < computerBoardArr.length && row >= 0 && row < computerBoardArr[0].length) {
-        // Decrease by 2 for hits
-        if (computerBoardArr[col][row] === 1) {
-          computerBoardArr[col][row] -= 2;
-          hitCount++;
-        }
-        // Decrease by 2 for misses
-        else if (computerBoardArr[col][row] === 0) {
-          computerBoardArr[col][row] -= 2;
+          //HIT
+        } else if (computerBoardArr[colIdx][rowIdx] === 1) {
+          messageEl.innerHTML = "CANNON HITS!";
+          //console.log('player gets a hit')
+          computerBoardArr[colIdx][rowIdx] -= 2;
+          //console.log(evt.target.classList)
+          computerFleetHealth -= 6;
+          checkIfSunk(computerFleet, computerBoardArr)
         }
       }
-    }
 
-    turn *= -1;
-    computerFleetHealth -= (6 * hitCount);
-    checkIfSunk(computerFleet, computerBoardArr);
+    }
+    else if (selectedWeapon === 'LASER') {
+
+      /*----- LASER -----*/
+
+
+
+      // On player's turn, interact with computer's board
+      if (turn === 1 && evt.target.id.startsWith('C')) {
+
+        // Find if there are any valid cells in the column to hit
+        const validCells = computerBoardArr[colIdx].some(cell => cell >= 0);
+
+        if (!validCells) {
+          console.log('no empty cells in the column to hit');
+          return;
+        }
+
+        let hitCount = 0; // to count the number of hits
+
+        // Modify cells in the column
+        computerBoardArr[colIdx] = computerBoardArr[colIdx].map(cell => {
+          if (cell === 1) {
+            messageEl.innerHTML = "LASER STRIKE!";
+            hitCount++;
+            return cell - 2; // decrease by 2 for hits
+          }
+          if (cell === 0) {
+            return cell - 2; // decrease by 2 for misses
+          }
+          return cell; // return cell value unchanged for cells < 0
+        });
+        PLAYERWEAPONS.laser -= 1;
+        turn *= -1;
+        computerFleetHealth -= (6 * hitCount);
+        checkIfSunk(computerFleet, computerBoardArr);
+      }
+
+    }
+    else if (selectedWeapon === 'NUKE') {
+      /*----- NUKE -----*/
+
+
+      if (turn === 1 && evt.target.id.startsWith('C')) {
+
+        let hitCount = 0; // to count the number of hits
+
+        // Calculate the indices of cells around the clicked cell in the pattern
+        const indices = [
+          [colIdx, rowIdx - 2], [colIdx - 1, rowIdx - 1], [colIdx, rowIdx - 1], [colIdx + 1, rowIdx - 1],
+          [colIdx - 2, rowIdx], [colIdx - 1, rowIdx], [colIdx, rowIdx], [colIdx + 1, rowIdx], [colIdx + 2, rowIdx],
+          [colIdx - 1, rowIdx + 1], [colIdx, rowIdx + 1], [colIdx + 1, rowIdx + 1], [colIdx, rowIdx + 2]
+        ];
+
+        // Iterate over each index pair
+        for (let i = 0; i < indices.length; i++) {
+          const [col, row] = indices[i];
+          console.log(col, row)
+          // Check if index pair is valid
+          if (col >= 0 && col < computerBoardArr.length && row >= 0 && row < computerBoardArr[0].length) {
+            // Decrease by 2 for hits
+            if (computerBoardArr[col][row] === 1) {
+              computerBoardArr[col][row] -= 2;
+              messageEl.innerHTML = "NUCLEAR DECIMATION!!";
+              hitCount++;
+            }
+            // Decrease by 2 for misses
+            else if (computerBoardArr[col][row] === 0) {
+              computerBoardArr[col][row] -= 2;
+            }
+          }
+        }
+        PLAYERWEAPONS.nuke -= 1;
+        turn *= -1;
+        computerFleetHealth -= (6 * hitCount);
+        checkIfSunk(computerFleet, computerBoardArr);
+      }
+
+    }
   }
 
-
-
-
-  // /*----- LASER -----*/
-
-  // // On player's turn, interact with computer's board
-  // if (turn === 1 && evt.target.id.startsWith('C')) {
-
-  //   // Find if there are any valid cells in the column to hit
-  //   const validCells = computerBoardArr[colIdx].some(cell => cell >= 0);
-
-  //   if (!validCells) {
-  //     console.log('no empty cells in the column to hit');
-  //     return;
-  //   }
-
-  //   let hitCount = 0; // to count the number of hits
-
-  //   // Modify cells in the column
-  //   computerBoardArr[colIdx] = computerBoardArr[colIdx].map(cell => {
-  //     if (cell === 1) {
-  //       hitCount++;
-  //       return cell - 2; // decrease by 2 for hits
-  //     }
-  //     if (cell === 0) {
-  //       return cell - 2; // decrease by 2 for misses
-  //     }
-  //     return cell; // return cell value unchanged for cells < 0
-  //   });
-
-  //   turn *= -1;
-  //   computerFleetHealth -= (6 * hitCount);
-  //   checkIfSunk(computerFleet, computerBoardArr);
-  // }
-
-
-  // /*----- CANNON -----*/
-
-  //  // On player's turn, interact with computer's board
-  //  if (turn === 1 && evt.target.id.startsWith('C')) {
-  //   if (computerBoardArr[colIdx][rowIdx] < 0) {
-  //     //console.log('not valid');
-  //     return;
-
-  //     //MISS
-  //   } else if (computerBoardArr[colIdx][rowIdx] === 0) {
-  //     // If the player doesn't get a hit, switch to computer's turn
-  //     //console.log('player misses')
-  //     turn *= -1
-  //     computerBoardArr[colIdx][rowIdx] -= 2;
-
-  //     //HIT
-  //   } else if (computerBoardArr[colIdx][rowIdx] === 1) {
-  //     //console.log('player gets a hit')
-  //     computerBoardArr[colIdx][rowIdx] -= 2;
-  //     //console.log(evt.target.classList)
-  //     computerFleetHealth -= 6;
-  //     checkIfSunk(computerFleet, computerBoardArr)
-  //   }
-  // }
-
-  /*----- LASER -----*/
-
   //Check for winner
+  grantNukes();
   winner = getWinner();
   render();
   //Trigger the Computer to take it's turn after a 2.5 second delay
@@ -385,6 +468,7 @@ function computerTurnAI() {
     }
 
     winner = getWinner();
+    grantNukes();
     render();
   }
 }
@@ -437,11 +521,45 @@ function render() {
   renderBoard(playerBoardArr, true, PLAYERCOLORS);
   renderControls();
   renderFleetHealth();
-  renderTurnIndicator()
+  renderTurnIndicator();
+  renderWeaponCounters();
+  renderWeaponButtons();
 }
 
 function renderControls() {
   startBtn.innerText = winner ? 'PLAY AGAIN' : 'START GAME';
+}
+
+function renderWeaponButtons() {
+  if (selectedWeapon === 'LASER' && PLAYERWEAPONS.laser <= 0) {
+    selectedWeapon = 'CANNON';
+  }
+  if (selectedWeapon === 'NUKE' && PLAYERWEAPONS.nuke <= 0) {
+    selectedWeapon = 'CANNON';
+  }
+
+  if (selectedWeapon === 'CANNON') {
+    cannonBtn.style.backgroundColor = 'blueviolet';
+    cannonBtn.style.border = '.5vmin inset rgb(110, 239, 240)'
+    laserBtn.style.backgroundColor = '';
+    laserBtn.style.border = '';
+    nukeBtn.style.backgroundColor = '';
+    nukeBtn.style.border = '';
+  } else if (selectedWeapon === 'LASER') {
+    laserBtn.style.backgroundColor = 'blueviolet';
+    laserBtn.style.border = '.5vmin inset rgb(110, 239, 240)'
+    cannonBtn.style.backgroundColor = '';
+    cannonBtn.style.border = '';
+    nukeBtn.style.backgroundColor = '';
+    nukeBtn.style.border = '';
+  } else if (selectedWeapon === 'NUKE') {
+    nukeBtn.style.backgroundColor = 'blueviolet';
+    nukeBtn.style.border = '.5vmin inset rgb(110, 239, 240)'
+    cannonBtn.style.backgroundColor = '';
+    cannonBtn.style.border = '';
+    laserBtn.style.backgroundColor = '';
+    laserBtn.style.border = '';
+  }
 }
 
 function renderBoard(boardArr, isPlayerBoard, Colors) {
@@ -454,6 +572,19 @@ function renderBoard(boardArr, isPlayerBoard, Colors) {
       cellEl.style.backgroundColor = `${Colors[cellVal]}`;
     })
   });
+}
+
+function grantNukes() {
+  if (nukesGranted > 0) {
+    return
+  }
+  if (playerFleetHealth > (computerFleetHealth + 40)) {
+    PLAYERWEAPONS.nuke += 1;
+    nukesGranted += 1;
+  } else if (computerFleetHealth > (playerFleetHealth + 40)) {
+    COMPWEAPONS.nuke += 1;
+    nukesGranted += 1;
+  }
 }
 
 function getWinner() {
@@ -489,15 +620,28 @@ function renderFleetHealth() {
   playerHealthDisplay.innerText = playerFleetHealth > 0 ? `${playerFleetHealth}%` : `0%`;
 }
 
+function renderWeaponCounters() {
+  cannonCounter.innerText = PLAYERWEAPONS.cannon;
+  laserCounter.innerText = PLAYERWEAPONS.laser;
+  nukeCounter.innerText = PLAYERWEAPONS.nuke;
+
+}
+
+
 function renderMessage() {
   if (winner !== null) {
-    messageEl.innerHTML = `${winner === 1 ? TURNS.player : TURNS.computer} wins!!!`;
+    setTimeout(() => {
+      messageEl.innerHTML = `${winner === 1 ? TURNS.player : TURNS.computer} WINS!!!`;
+    }, 700);
     //scoreBoard.innerHTML = `<strong>SCORES: ${player1}: ${player1Score} | ${player2}: ${player2Score}</strong>`;
     //else, the game is in play
   } else if (turn === 0) {
     return
   } else {
-    messageEl.innerHTML = `${turn === 1 ? TURNS.player : TURNS.computer}'s turn`;
+    setTimeout(() => {
+      messageEl.innerHTML = `${turn === 1 ? TURNS.player : TURNS.computer}'S TURN`;
+    }, 700);
+
     //scoreBoard.innerHTML = `<strong>SCORES: ${player1}: ${player1Score} | ${player2}: ${player2Score}</strong>`;
   }
 };
@@ -599,6 +743,7 @@ function checkIfSunk(fleet, boardArr) {
     //console.log(`shipSunk: ${shipSunk}`);
 
     if (shipSunk === true) {
+      messageEl.innerHTML = "SHIP SUNK!";
       ship.forEach(shipSection => {
         const shipDiv = document.getElementById(`${shipSection}`);
         sunkenLocations.push(shipSection);
@@ -657,6 +802,7 @@ function reshuffleBoards() {
   // randomly place the ships on the board again
   placeShipsOnBoard(playerFleet, playerBoardArr);
   placeShipsOnBoard(computerFleet, computerBoardArr);
+  shuffleFlashing = false;
   render();
 }
 init();
