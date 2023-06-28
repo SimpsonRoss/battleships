@@ -75,6 +75,7 @@ a {
   color: rgb(110, 239, 240);
   background-color: rgb(23, 54, 55);
   border: .5vmin outset rgb(110, 239, 240);
+  width: 21vmin;
 }
 
 #miscDashboard {
@@ -90,16 +91,17 @@ a {
   color: rgb(110, 239, 240);
   background-color: rgb(23, 54, 55);
   border: .5vmin outset rgb(110, 239, 240);
+  width: 21vmin;
 }
 
 #miscDashboardBottom {
   font-family: 'JetBrains Mono', monospace;
+  width: 21vmin;
   font-weight: 300;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  text-align: center;
   font-size: 2vmin;
   font-weight: bold;
   height: 31vmin;
@@ -109,9 +111,13 @@ a {
   border: .5vmin outset rgb(110, 239, 240);
 }
 
-.alienImage {
-  width: 10vmin;
+#alien {
+  position: relative;
+  width: 100%;
 }
+
+
+
 
 #playerDashboard {
   font-family: 'JetBrains Mono', monospace;
@@ -126,6 +132,7 @@ a {
   color: rgb(110, 239, 240);
   background-color: rgb(23, 54, 55);
   border: .5vmin outset rgb(110, 239, 240);
+  width: 21vmin;
 }
 
 .weaponButtonsBox {
@@ -211,6 +218,7 @@ button:hover {
 #messageBar {
   display: flex;
   justify-content: center;
+  font-size: 2vmin;
   letter-spacing: .15em;
   align-items: center;
   height: 10vmin;

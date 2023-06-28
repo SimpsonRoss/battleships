@@ -24,7 +24,7 @@ const COMPCOLORS = {
 // An object to store the player names, incase I want to adjust these
 const TURNS = {
   player: 'PLAYER',
-  computer: 'COMPUTER',
+  computer: 'ALIEN',
 }
 
 const PLAYERWEAPONS = {
@@ -38,6 +38,13 @@ const COMPWEAPONS = {
   laser: 2,
   nuke: 0,
 }
+
+const ANIMATIONS = {
+  celebration: ['alienCelebration2', 'alienCelebration3', 'alienCelebration4', 'alienCelebration6'],
+  idle: ['alienIdle1', 'alienIdle2', 'alienIdle3', 'alienIdle4'],
+}
+
+
 
 /*----- state variables -----*/
 let computerBoardArr;
@@ -73,6 +80,7 @@ const nukeCounter = document.getElementById('playerNukeCounter');
 const cannonBtn = document.getElementById('playerCannon');
 const laserBtn = document.getElementById('playerLaser');
 const nukeBtn = document.getElementById('playerNuke');
+const alien = document.getElementById('alien');
 
 
 /*----- event listeners -----*/
@@ -174,22 +182,42 @@ function flashStartButton() {
   render();
 }
 
+function selectRandomIdle() {
+  if (winner !== null) { return };
+  let randomIdle = ANIMATIONS.idle[Math.floor(Math.random() * ANIMATIONS.idle.length)];
+  alien.src = `images/alien/${randomIdle}.gif`;
+}
+
+function selectRandomCelebration() {
+  if (winner !== null) { return };
+  let randomCelebration = ANIMATIONS.celebration[Math.floor(Math.random() * ANIMATIONS.celebration.length)];
+  alien.src = `images/alien/${randomCelebration}.gif`;
+}
 
 
 
 function startTurns() {
   // if the game is not in progress, start it
+
+  shuffleFlashing = false;
   startFlashing = false;
-  if (turn === 0) {
+
+  if (turn === 0 && winner === null) {
     turn = 1;
     computerBoard.classList.add('hoverEffect');
+    render();
+    selectRandomIdle();
     //console.log('start game!')
   } else if (winner !== null) { // if the game has ended, reset it
+    console.log("REEEESSSEEEETTTTINNGGG")
     init();
     //console.log('reset game!')
+    render();
     messageEl.innerText = "Return at your peril";
+    selectRandomIdle();
+
   }
-  render();
+
 }
 
 function boardClick(evt) {
@@ -215,6 +243,7 @@ function boardClick(evt) {
 
           //MISS
         } else if (computerBoardArr[colIdx][rowIdx] === 0) {
+          messageEl.innerHTML = "MISSED!";
           // If the player doesn't get a hit, switch to computer's turn
           //console.log('player misses')
           turn *= -1
@@ -222,6 +251,7 @@ function boardClick(evt) {
 
           //HIT
         } else if (computerBoardArr[colIdx][rowIdx] === 1) {
+
           messageEl.innerHTML = "CANNON HITS!";
           //console.log('player gets a hit')
           computerBoardArr[colIdx][rowIdx] -= 2;
@@ -516,7 +546,7 @@ function generateBoard(board, isPlayerBoard, rows = ROWS, columns = COLS) {
 }
 
 function render() {
-  renderMessage();
+
   renderBoard(computerBoardArr, false, COMPCOLORS);
   renderBoard(playerBoardArr, true, PLAYERCOLORS);
   renderControls();
@@ -524,6 +554,7 @@ function render() {
   renderTurnIndicator();
   renderWeaponCounters();
   renderWeaponButtons();
+  renderMessage();
 }
 
 function renderControls() {
@@ -579,6 +610,7 @@ function grantNukes() {
     return
   }
   if (playerFleetHealth > (computerFleetHealth + 40)) {
+    messageEl.innerHTML = "NUKE GRANTED!";
     PLAYERWEAPONS.nuke += 1;
     nukesGranted += 1;
   } else if (computerFleetHealth > (playerFleetHealth + 40)) {
@@ -592,9 +624,17 @@ function getWinner() {
   // i.e. the board owner has no ships and has lost 
   if (computerBoardArr.flat().every(cell => cell <= 0)) {
     //console.log('humans win');
+    alien.src = `images/alien/alienGrave.png`;
+    startFlashing = true;
+    flashingStart = setInterval(flashStartButton, 500);
+    render();
     return 1;
   } else if (playerBoardArr.flat().every(cell => cell <= 0)) {
     //console.log('aliens win');
+    alien.src = `images/alien/alienCelebration5.gif`;
+    startFlashing = true;
+    flashingStart = setInterval(flashStartButton, 500);
+    render();
     return -1;
   }
   // If we haven't returned yet, there's no winner
@@ -629,14 +669,15 @@ function renderWeaponCounters() {
 
 
 function renderMessage() {
+  if (turn === 0) { return }
   if (winner !== null) {
-    setTimeout(() => {
-      messageEl.innerHTML = `${winner === 1 ? TURNS.player : TURNS.computer} WINS!!!`;
-    }, 700);
+    console.log("SETTING WIN TIMEOUT")
+    // setTimeout(() => {
+    //   messageEl.innerHTML = `${winner === 1 ? TURNS.player : TURNS.computer} WINS!!!`;
+    // }, 700);
+    messageEl.innerHTML = `${winner === 1 ? TURNS.player : TURNS.computer} WINS!!!`;
     //scoreBoard.innerHTML = `<strong>SCORES: ${player1}: ${player1Score} | ${player2}: ${player2Score}</strong>`;
     //else, the game is in play
-  } else if (turn === 0) {
-    return
   } else {
     setTimeout(() => {
       messageEl.innerHTML = `${turn === 1 ? TURNS.player : TURNS.computer}'S TURN`;
@@ -743,6 +784,11 @@ function checkIfSunk(fleet, boardArr) {
     //console.log(`shipSunk: ${shipSunk}`);
 
     if (shipSunk === true) {
+      if (!winner) {
+        selectRandomCelebration();
+        setTimeout(selectRandomIdle, 3000)
+      }
+
       messageEl.innerHTML = "SHIP SUNK!";
       ship.forEach(shipSection => {
         const shipDiv = document.getElementById(`${shipSection}`);
