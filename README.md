@@ -54,8 +54,7 @@ For this project we were tasked to choose and game and complete it using these t
 
 ## How to Play
 
-There's no set-up required and the game is device responsive.
-[PLAY NOW](https://simpsonross.github.io/battleships/)
+[PLAY NOW](https://simpsonross.github.io/battleships/) There's no set-up required and the game is device responsive.
 
 <!-- USAGE EXAMPLES -->
 
@@ -85,7 +84,39 @@ How to play the Battleships Game.
 - [x] Ship dynamic classes and shaping
 - [x] Health Counters
 
+## Sprint Planning
+
+## Timeline
+
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Biggest Challenge
+The biggest challenge and time sink of the creation process was developing the functions to control the 'AI' opponent. 
+I broke them down into four stages so that I could attempt them at different stages of the project, depending on how much other vital functionality had been built out. 
+
+Evolutions of the AI:
+- Randomly picks squares
+- Chooses squares around last hit
+- Learns direction if subsequent last hits are in a line
+- Sneaky… Accesses the unsunk ships of the player, towards endgame
+
+I'd like to wipe out step four and amend the AI opponent so that it can remember possible ship locations and return to hunt them. For now though it makes the opponent challenging and from feedback it encourages people to continue playing.
+
+## Mistakes
+
+## User Feedback
+
+## Next Steps
+
+## Key Learnings
+- Consider classes and object more in planning
+- Take breaks and tidy up code, keep it DRY
+- Code CSS for mobile first
+- Assign time to unit testing
+- Getting user feedback is key
+- Maintain a healthy project/life balance, even if you're hooked on making a dancing alien.
+
 
 <!-- CONTRIBUTING -->
 
