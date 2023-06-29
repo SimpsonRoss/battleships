@@ -36,13 +36,14 @@ a {
 
 #main {
   width: 95vmin;
-  height: 120vmin;
+  height: 123vmin;
   display: grid;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   gap: 1vmin;
   padding: 1.2vmin;
+  padding-left: 2vmin;
   /* border: .8vmin solid rgb(43, 98, 101); */
   border: 1.5vmin solid rgba(115, 250, 250, 0.35);
   border-radius: 0.4vmin 3vmin 3vmin 0.4vmin;
@@ -241,7 +242,7 @@ button:hover {
   color: rgb(110, 239, 240);
   /* text-shadow: 0 0 .2vmin rgb(209, 248, 243); */
   background-color: rgb(23, 54, 55);
-  margin: .5vmin;
+  margin: 1vmin auto;
   border: .5vmin outset rgb(110, 239, 240);
 }
 
@@ -444,6 +445,7 @@ button:hover {
     height: 10vmin;
     font-size: 2vmin;
     padding: 0;
+    margin: .5vmin;
 
   }
 
