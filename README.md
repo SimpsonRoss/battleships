@@ -1,5 +1,4 @@
 <a name="readme-top"></a>
-
 # Battleships
 
 <!-- TABLE OF CONTENTS -->
@@ -124,8 +123,9 @@ Pseudocode:
     * 0 = Empty Square,
     * 1 =  Healthy Ship,
 
+## Wireframe
 
-
+![Wireframe of my Battleships game](https://github.com/SimpsonRoss/battleships/blob/main/resources/game-done-gif.gif)
 
 ## MVP - Minimum Viable Product
 
