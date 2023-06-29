@@ -3,12 +3,6 @@
   margin: 0;
 }
 
-:root {
-  --color-hud: grey;
-  --color-space: black;
-  --color-buttons: darkgrey;
-}
-
 body {
   height: 100vh;
   font-family: 'JetBrains Mono', monospace;
@@ -41,7 +35,6 @@ a {
   gap: 1vmin;
   padding: 1.2vmin;
   padding-left: 2vmin;
-  /* border: .8vmin solid rgb(43, 98, 101); */
   border: 1.5vmin solid rgba(115, 250, 250, 0.35);
   border-radius: 0.4vmin 3vmin 3vmin 0.4vmin;
   background-color: black;
@@ -73,7 +66,7 @@ a {
   display: flex;
   flex-direction: column;
   text-align: center;
-  font-size: 2vmin;
+  font-size: 2cap;
   font-weight: bold;
   height: 12vmin;
   border-radius: 2vmin;
@@ -84,14 +77,10 @@ a {
 }
 
 #weaponDashboard {
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-
-
   border-radius: 2vmin;
   color: rgb(110, 239, 240);
   background-color: rgb(23, 54, 55);
@@ -100,11 +89,10 @@ a {
   width: 21vmin;
 }
 
+/* Animations */
 #alienDashboard {
-
   width: 21vmin;
   height: vmin;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -136,20 +124,12 @@ a {
 }
 
 .weaponButtonsBox {
-  /* height: 40vmin;
-  width: auto; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: .5vmin .5vmin;
   gap: 1vmin;
-}
-
-.shelf {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
 }
 
 .weaponButton {
@@ -163,20 +143,14 @@ a {
 }
 
 .weaponButton:hover {
-  /* border: .5vmin inset rgb(110, 239, 240); */
   background-color: blueviolet;
 }
-
 
 .buttonImages {
   height: 7vmin;
   width: 7vmin;
   margin-right: -4.05vmin;
 }
-
-/* .buttonImages:hover {
-filter: invert(100%);
-} */
 
 .playerNames {
   font-family: 'JetBrains Mono', monospace;
@@ -215,17 +189,12 @@ button {
   background-color: rgb(23, 54, 55);
 }
 
-
-
 button:hover {
   color: rgb(23, 54, 55);
   background-color: rgb(110, 239, 240);
 }
 
-
-
 #messageBar {
-
   display: flex;
   justify-content: center;
   font-size: 4vmin;
@@ -236,13 +205,10 @@ button:hover {
   padding: 5vmin;
   border-radius: 4vmin;
   color: rgb(110, 239, 240);
-  /* text-shadow: 0 0 .2vmin rgb(209, 248, 243); */
   background-color: rgb(23, 54, 55);
   margin: 1vmin auto;
   border: .5vmin outset rgb(110, 239, 240);
 }
-
-
 
 #computerBoard {
   height: 40vmin;
@@ -344,12 +310,9 @@ button:hover {
   margin: 0;
 }
 
-
-
 .toolTip {
   position: relative;
   display: inline-block;
-
 }
 
 .toolTip .tipText {
@@ -358,7 +321,6 @@ button:hover {
   visibility: hidden;
   width: 20vmin;
   background-color: blueviolet;
-  /* border: .2vmin solid rgb(110, 240, 243); */
   color: white;
   text-align: center;
   border-radius: 5vmin;
@@ -379,7 +341,6 @@ button:hover {
   border-width: 2.5vmin;
   border-style: solid;
   border-color: transparent transparent blueviolet transparent;
-
 }
 
 .toolTip:hover .tipText {
@@ -388,13 +349,11 @@ button:hover {
 
 .toolTipTitle {
   font-weight: 700 !important;
-
 }
 
 .toolTipBody {
   font-weight: 500 !important;
 }
-
 
 @media screen and (min-width: 600px) {
   #main {
@@ -428,7 +387,6 @@ button:hover {
   #rightPanel {
     height: 81vmin;
     width: 20vmin;
-
   }
 
   #leftPanel {
@@ -437,18 +395,12 @@ button:hover {
   }
 
   #messageBar {
-
     height: 10vmin;
     font-size: 2vmin;
     padding: 0;
     margin: .5vmin;
     width: 55vmin;
-
   }
-
-
-
-
 
   #computerBoard {
     height: 35.5vmin;
@@ -464,7 +416,6 @@ button:hover {
     grid-template-rows: repeat(6, 5vmin);
   }
 
-
   button {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 700;
@@ -476,7 +427,6 @@ button:hover {
   }
 
   .weaponButton {
-
     width: 5.5vmin;
     height: 5.5vmin;
   }
@@ -539,15 +489,11 @@ button:hover {
     font-size: 1.5vmin;
   }
 
-
   .toolTip .tipText {
     font-size: 1.5vmin;
-
     width: 15vmin;
-
     border-radius: 5vmin;
     padding: 1vmin;
-
     z-index: 1;
     top: 120%;
     left: 50%;
@@ -559,8 +505,6 @@ button:hover {
     left: 50%;
     margin-left: -1vmin;
     border-width: 1vmin;
-
   }
-
 
 }
