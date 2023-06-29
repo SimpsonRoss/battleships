@@ -53,8 +53,11 @@
 ## About The Project
 
 [![Product Name Screen Shot][product-screenshot]](https://imgur.com/a/DBWltt7)
+[Imgur](https://i.imgur.com/rUvN5f4.gifv)
 
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
+This application is a space themed Battleships game, where the player represents the human race in a fight against an ‘alien’ AI opponent. It’s a twist on the original Battleships game, but it incorporates some new features such as cannon, laser and nuclear weapons and an animated alien mascot.
+
+This was project one of my General Assembly Software Engineering Immersive bootcamp, and I was tasked to create the game using HTML/CSS/JavaScript.
 
 Here's why:
 
