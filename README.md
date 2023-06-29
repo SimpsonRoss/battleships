@@ -80,49 +80,49 @@ Pseudocode:
 * Define required constants:
   * Define the row and columns amount, incase I want to change the board size
   * Define a colors object with: 
-keys of 'null' (when the square is empty)
-1 : the square is occupied by a ship 
--1 : the square is occupied and bombed
--2: the square is empty and bombed
+    * keys of 'null' (when the square is empty)
+    * 1 : the square is occupied by a ship 
+    * -1 : the square is occupied and bombed
+    * -2: the square is empty and bombed
 
-Define required variables used to track the state of the game:
-The Boards: Use two 2D board arrays:
-One for the computer 
-One for the player
-The Fleets: Use two 2D fleet arrays, each containing 5 ships:
-One for the computer 
-One for the player
-Use a turn state variable to determine who’s turn it is
-Use a winner state variable to represents a win or loss for the player, there should be no tie scenario
+* Define required variables used to track the state of the game:
+  * The Boards: Use two 2D board arrays:
+    * One for the computer 
+    * One for the player
+  * The Fleets: Use two 2D fleet arrays, each containing 5 ships:
+    * One for the computer 
+    * One for the player
+  * Use a turn state variable to determine who’s turn it is
+  * Use a winner state variable to represents a win or loss for the player, there should be no tie scenario
 
-Store elements on the page that will be accessed in code more than once in variables to make code more concise, readable and performant:
-Computer board divs
-Player board divs 
-Message element 
-Play Again button 
-Note: For MVP this might be all I need
+* Store elements on the page that will be accessed in code more than once in variables to make code more concise, readable and performant:
+  * Computer board divs
+  * Player board divs 
+  * Message element 
+  * Play Again button 
+  Note: For MVP this might be all I need
 
-Upon loading the app should:
-Initialise the state variables:
-Iniatilise both the computer and player board array to 60 nulls/0s each, each index representing a cell on the respective game board
-Initialise the turn variable to determine that it’s the Player’s turn first (always)
-Initialise winner to null to represent that neither the player or computer has won yet, and the game is in play
-Render state variables to the page:
-Loop over each cell of each board
-Use the index of the iteration to access the mapped value from the board array.
-Set the color (for MVP) of the current element by using the value as a key on the colors lookup object (constant).
-Render a message:
-If winner has a value other than null (game still in progress)
-Otherwise, render a congratulatory message to which player has won
-Wait for the user to click a square
+* Upon loading the app should:
+  * Initialise the state variables:
+    * Iniatilise both the computer and player board array to 60 nulls/0s each, each index representing a cell on the respective game board
+    * Initialise the turn variable to determine that it’s the Player’s turn first (always)
+    * Initialise winner to null to represent that neither the player or computer has won yet, and the game is in play
+  * Render state variables to the page:
+    * Loop over each cell of each board
+      * Use the index of the iteration to access the mapped value from the board array.
+      * Set the color (for MVP) of the current element by using the value as a key on the colors lookup object (constant).
+  * Render a message:
+    * If winner has a value other than null (game still in progress)
+    * Otherwise, render a congratulatory message to which player has won
+  * Wait for the user to click a square
 
-Handle a player clicking a square:
-Obtain the index of the square that was clicked by the id of the div element
-Subtract 2 from the value of that array square:
-  -2 = Safe,
-  -1 = Bombed Ship,
-  0 = Empty Square,
-  1 =  Healthy Ship,
+* Handle a player clicking a square:
+  * Obtain the index of the square that was clicked by the id of the div element
+  * Subtract 2 from the value of that array square:
+    * -2 = Safe,
+    * -1 = Bombed Ship,
+    * 0 = Empty Square,
+    * 1 =  Healthy Ship,
 
 
 
