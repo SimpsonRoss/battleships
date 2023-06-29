@@ -38,7 +38,7 @@ This was project one of my General Assembly Software Engineering Immersive bootc
 
 ## Game
 
-![Battleships product image](https://github.com/SimpsonRoss/battleships/blob/main/resources/game-done-gif.gif)
+![Battleships product image](https://github.com/SimpsonRoss/battleships/blob/main/resources/web-gameplay.gif)
 
 ### Built With
 
@@ -204,6 +204,10 @@ This diagram shows the iterations my game went through as I worked through the p
 ![Graphic timeline of my battleships project](https://github.com/SimpsonRoss/battleships/blob/main/resources/timeline.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Mobile Gameplay
+
+![Mobile gameplay of the game](https://github.com/SimpsonRoss/battleships/blob/main/resources/mobile-gameplay.gif)
 
 ## Biggest Challenge
 
