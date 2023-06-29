@@ -92,7 +92,7 @@ a {
 /* Animations */
 #alienDashboard {
   width: 21vmin;
-  height: vmin;
+  height: 24vmin;
   display: flex;
   flex-direction: column;
   justify-content: center;
