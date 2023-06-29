@@ -1,7 +1,7 @@
 * {
   box-sizing: border-box;
   margin: 0;
-  /* border: 1px solid red; */
+  border: 1px solid red;
 }
 
 :root {
@@ -29,11 +29,14 @@ a {
 #gameTitle {
   margin: 1vmin auto;
   font-family: 'Bruno Ace SC', sans-serif;
-  font-size: 6vmin;
+  font-size: 8.5vmin;
   text-align: center;
 }
 
+
 #main {
+  width: 95vmin;
+  height: 120vmin;
   display: grid;
   flex-direction: row;
   justify-content: center;
@@ -41,12 +44,14 @@ a {
   gap: 1vmin;
   padding: 1.2vmin;
   /* border: .8vmin solid rgb(43, 98, 101); */
-  border: .8vmin solid rgba(115, 250, 250, 0.35);
+  border: 1.5vmin solid rgba(115, 250, 250, 0.35);
   border-radius: 0.4vmin 3vmin 3vmin 0.4vmin;
   background-color: black;
 }
 
 #leftPanel {
+  height: 115vmin;
+  width: 67vmin;
   display: flex;
   flex-direction: column;
   gap: .5vmin;
@@ -55,6 +60,8 @@ a {
 }
 
 #rightPanel {
+  height: 115vmin;
+  width: 22vmin;
   display: flex;
   flex-direction: column;
   gap: .5vmin;
@@ -78,35 +85,35 @@ a {
   width: 21vmin;
 }
 
-#miscDashboard {
+#weaponDashboard {
   font-family: 'JetBrains Mono', monospace;
   font-weight: 300;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   font-size: 2vmin;
   font-weight: bold;
-  height: 8vmin;
+
   border-radius: 2vmin;
   color: rgb(110, 239, 240);
   background-color: rgb(23, 54, 55);
   border: .5vmin outset rgb(110, 239, 240);
+  height: 40vmin;
   width: 21vmin;
 }
 
-#miscDashboardBottom {
-  font-family: 'JetBrains Mono', monospace;
+#alienDashboard {
+
   width: 21vmin;
-  font-weight: 300;
+  height: vmin;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 2vmin;
-  font-weight: bold;
-  height: 31vmin;
   border-radius: 2vmin;
-  color: rgb(110, 239, 240);
   background-color: rgb(23, 54, 55);
   border: .5vmin outset rgb(110, 239, 240);
 }
@@ -115,9 +122,6 @@ a {
   position: relative;
   width: 100%;
 }
-
-
-
 
 #playerDashboard {
   font-family: 'JetBrains Mono', monospace;
@@ -136,11 +140,14 @@ a {
 }
 
 .weaponButtonsBox {
+  /* height: 40vmin;
+  width: auto; */
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: .5vmin .5vmin;
+  gap: 1vmin;
 }
 
 .shelf {
@@ -155,10 +162,8 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 5.5vmin;
-  height: 5.5vmin;
-
-
+  width: 10vmin;
+  height: 10vmin;
 }
 
 .weaponButton:hover {
@@ -168,38 +173,46 @@ a {
 
 
 .buttonImages {
-  height: 3vmin;
-  width: 3vmin;
-  margin-right: -1.9vmin;
+  height: 7vmin;
+  width: 7vmin;
+  margin-right: -4.05vmin;
 }
 
 /* .buttonImages:hover {
-  filter: invert(100%);
+filter: invert(100%);
 } */
 
 .playerNames {
   font-family: 'JetBrains Mono', monospace;
+  letter-spacing: .15em;
   margin: .5vmin auto;
   font-size: 2.5vmin;
 }
 
-
-
 #computerFleetHealth {
-  font-size: 3vmin;
+  font-size: 4vmin;
+  padding: 0;
+  margin: -.5vmin;
 }
 
 #playerFleetHealth {
-  font-size: 3vmin;
+  font-size: 4vmin;
+  padding: 0;
+  margin: -.5vmin;
+}
+
+.fleetText {
+  font-size: 0vmin;
 }
 
 button {
   font-family: 'JetBrains Mono', monospace;
   font-weight: 700;
   width: 20vmin;
+  height: 13vmin;
   padding: 1vmin;
   margin: .5vmin;
-  font-size: 2vmin;
+  font-size: 3.5vmin;
   border-radius: 1vmin;
   border: .5vmin outset rgb(110, 239, 240);
   color: rgb(86, 187, 190);
@@ -216,16 +229,17 @@ button:hover {
 
 
 #messageBar {
+
   display: flex;
   justify-content: center;
-  font-size: 2vmin;
+  font-size: 4vmin;
   letter-spacing: .15em;
   align-items: center;
-  height: 10vmin;
-  padding: 0;
+  height: 32vmin;
+  padding: 5vmin;
   border-radius: 4vmin;
   color: rgb(110, 239, 240);
-  text-shadow: 0 0 .2vmin rgb(209, 248, 243);
+  /* text-shadow: 0 0 .2vmin rgb(209, 248, 243); */
   background-color: rgb(23, 54, 55);
   margin: .5vmin;
   border: .5vmin outset rgb(110, 239, 240);
@@ -234,20 +248,24 @@ button:hover {
 
 
 #computerBoard {
+  height: 40vmin;
+  width: 66vmin;
   display: grid;
   justify-content: center;
-  grid-template-columns: repeat(10, 5vmin);
-  grid-template-rows: repeat(6, 5vmin);
+  grid-template-columns: repeat(10, 6vmin);
+  grid-template-rows: repeat(6, 6vmin);
   gap: .5vmin;
   background-color: rgb(14, 32, 33);
   border-radius: 1vmin;
 }
 
 #playerBoard {
+  height: 40vmin;
+  width: 66vmin;
   display: grid;
   justify-content: center;
-  grid-template-columns: repeat(10, 5vmin);
-  grid-template-rows: repeat(6, 5vmin);
+  grid-template-columns: repeat(10, 6vmin);
+  grid-template-rows: repeat(6, 6vmin);
   gap: .5vmin;
   background-color: rgb(14, 32, 33);
   border-radius: 1vmin;
@@ -255,15 +273,15 @@ button:hover {
 
 .board {
   transition: border 0.15s ease-in-out;
-  border: .5vmin solid transparent;
+  border: 1vmin solid transparent;
 }
 
 .computer-active {
-  border: .5vmin double rgb(110, 239, 240);
+  border: 1vmin double rgb(110, 239, 240);
 }
 
 .player-active {
-  border: .5vmin double rgb(110, 239, 240);
+  border: 1vmin double rgb(110, 239, 240);
 }
 
 #footer {
@@ -271,7 +289,7 @@ button:hover {
 }
 
 #createdBy {
-  font-size: 1.5vmin;
+  font-size: 3vmin;
   text-align: center;
 }
 
@@ -311,16 +329,20 @@ button:hover {
 }
 
 .badge {
-  font-size: 1.3vmin;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 4vmin;
+  height: 4vmin;
+  font-size: 2.6vmin;
   position: relative;
-  bottom: -2vmin;
-  right: -1.5vmin;
-  /* background-color: blueviolet; */
-  border: .2vmin solid blueviolet;
+  bottom: -3.5vmin;
+  right: -2.8vmin;
+  border: .4vmin solid blueviolet;
   background-color: rgb(110, 240, 243);
   color: rgb(23, 54, 55);
   border-radius: .5vmin;
-  padding: 0 .4vmin;
+  padding: 0 0;
   font-weight: 500;
   margin: 0;
 }
@@ -335,9 +357,9 @@ button:hover {
 
 .toolTip .tipText {
   font-family: 'Open-sans', sans-serif;
-  font-size: 1.5vmin;
+  font-size: 2.5vmin;
   visibility: hidden;
-  width: 15vmin;
+  width: 20vmin;
   background-color: blueviolet;
   /* border: .2vmin solid rgb(110, 240, 243); */
   color: white;
@@ -346,8 +368,8 @@ button:hover {
   padding: 1vmin;
   position: absolute;
   z-index: 1;
-  top: 120%;
-  left: 50%;
+  top: 115%;
+  left: 28%;
   margin-left: -7.3vmin;
 }
 
@@ -356,8 +378,8 @@ button:hover {
   content: "";
   bottom: 100%;
   left: 50%;
-  margin-left: -1vmin;
-  border-width: 1vmin;
+  margin-left: -2.5vmin;
+  border-width: 2.5vmin;
   border-style: solid;
   border-color: transparent transparent blueviolet transparent;
 
@@ -374,4 +396,172 @@ button:hover {
 
 .toolTipBody {
   font-weight: 500 !important;
+}
+
+
+@media screen and (min-width: 600px) {
+  #main {
+    width: 84vmin;
+    height: 85vmin;
+    border: .8vmin solid rgba(115, 250, 250, 0.35);
+    border-radius: 0.4vmin 3vmin 3vmin 0.4vmin;
+    padding-left: 0vmin;
+  }
+
+  #gameTitle {
+    font-size: 6vmin;
+  }
+
+  #computerDashboard {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 300;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-size: 2vmin;
+    font-weight: bold;
+    height: 12vmin;
+    border-radius: 2vmin;
+    color: rgb(110, 239, 240);
+    background-color: rgb(23, 54, 55);
+    border: .5vmin outset rgb(110, 239, 240);
+    width: 21vmin;
+  }
+
+  #rightPanel {
+    height: 81vmin;
+    width: 20vmin;
+
+  }
+
+  #leftPanel {
+    height: 81vmin;
+    width: 57vmin;
+  }
+
+  #messageBar {
+
+    height: 10vmin;
+    font-size: 2vmin;
+    padding: 0;
+
+  }
+
+
+
+
+
+  #computerBoard {
+    height: 35.5vmin;
+    width: 56.5vmin;
+    grid-template-columns: repeat(10, 5vmin);
+    grid-template-rows: repeat(6, 5vmin);
+  }
+
+  #playerBoard {
+    height: 35.5vmin;
+    width: 56.5vmin;
+    grid-template-columns: repeat(10, 5vmin);
+    grid-template-rows: repeat(6, 5vmin);
+  }
+
+
+  button {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    width: 20vmin;
+    height: 6.7vmin;
+    padding: 1vmin;
+    margin: .5vmin;
+    font-size: 2vmin;
+  }
+
+  .weaponButton {
+
+    width: 5.5vmin;
+    height: 5.5vmin;
+  }
+
+  .weaponButtonsBox {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: .5vmin .5vmin;
+    height: auto;
+    width: auto;
+    margin-top: .5vmin .5vmin;
+    gap: 0vmin;
+  }
+
+  #weaponDashboard {
+    height: 8vmin;
+    width: 21vmin;
+  }
+
+  #computerFleetHealth {
+    font-size: 3vmin;
+    padding: 0;
+    margin: -.5vmin;
+  }
+
+  #playerFleetHealth {
+    font-size: 3vmin;
+    padding: 0;
+    margin: -.5vmin;
+  }
+
+  .fleetText {
+    font-size: 2vmin;
+  }
+
+  #alienDashboard {
+    height: 33vmin;
+  }
+
+  .buttonImages {
+    height: 3vmin;
+    width: 3vmin;
+    margin-right: -1.9vmin;
+  }
+
+  .badge {
+    width: 1.9vmin;
+    height: 1.9vmin;
+    font-size: 1.3vmin;
+    bottom: -2vmin;
+    right: -1.5vmin;
+    border-radius: .5vmin;
+    margin: 0;
+    border: .2vmin solid blueviolet;
+    padding: 0 .4vmin;
+  }
+
+  #createdBy {
+    font-size: 1.5vmin;
+  }
+
+
+  .toolTip .tipText {
+    font-size: 1.5vmin;
+
+    width: 15vmin;
+
+    border-radius: 5vmin;
+    padding: 1vmin;
+
+    z-index: 1;
+    top: 120%;
+    left: 50%;
+    margin-left: -7.3vmin;
+  }
+
+  .toolTip .tipText::after {
+    bottom: 100%;
+    left: 50%;
+    margin-left: -1vmin;
+    border-width: 1vmin;
+
+  }
+
+
 }
