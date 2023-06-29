@@ -30,15 +30,15 @@
 
 <!-- ABOUT THE PROJECT -->
 
-## About The Project
-
-![Battleships product image](https://github.com/SimpsonRoss/battleships/blob/main/resources/game-done-gif.gif)
+## About
 
 This application is a space themed Battleships game, where the player represents the human race in a fight against an ‘alien’ AI opponent. It’s a twist on the original Battleships game, but it incorporates some new features such as cannon, laser and nuclear weapons and an animated alien mascot.
 
 This was project one of my General Assembly Software Engineering Immersive bootcamp.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+## Game
+
+![Battleships product image](https://github.com/SimpsonRoss/battleships/blob/main/resources/game-done-gif.gif)
 
 ### Built With
 
@@ -52,7 +52,7 @@ For this project we were tasked to choose and game and complete it using these t
 
 <!-- GETTING STARTED -->
 
-## Getting Started
+## How to Play
 
 There's no set-up required and the game is device responsive.
 [PLAY NOW](https://simpsonross.github.io/battleships/)
