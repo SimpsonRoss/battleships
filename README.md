@@ -59,7 +59,28 @@ For this project we were tasked to choose and game and complete it using these t
 
 ## Usage
 
-How to play the Battleships Game.
+* [Open the game](https://simpsonross.github.io/battleships/)
+* Shuffle fleet
+  * Hit 'Shuffle Fleet' to randomly rearrange your ships
+* Start game
+  * Once you're happy with your ship locations, you can hit 'Start Game'
+* Choose weapon
+  * You have 3 weapons, from left to right:
+    * Cannon - destroys one cell at a time. Unlimted uses.
+    * Laser - destroys an entire column of cells. 2 uses.
+    * Nuke - destroys a 13 cell radius from the click location. 1 use, granted if you best your opponent by 40% health points.
+    Note: the tool-tips will also provide this info
+* Hunt the enemy ships
+  * Clicking on a cell will reveal what's underneath. 
+    * Grey - Empty space
+    * Red - Enemy ship
+* Sink enemy ships
+  * By clicking on all square of an enemy ship you'll sink it
+  * Sink all 5 enemy ships, before they destroy yours, and you win!
+* Play again
+  * Simply hit play again and repeat. See if you can destory your opponent, and be awarded a nuke   
+
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -125,11 +146,14 @@ Pseudocode:
 
 ## Wireframe
 
+Here is the initial sketch of the game. I used this to then draft out the basic grid layout for my mobile and desktop CSS. I'm happy with how close to the original design I stayed. I decided against using sprites for the ships in the end, as it didn't seem to fit with the simplistic retro aesthetic.
+
 ![Wireframe of my Battleships game](https://github.com/SimpsonRoss/battleships/blob/main/resources/game-done-gif.gif)
 
 ## Aesthetic Inspiration
 
 I wanted to give the game a retro arcade feel, with a simple neon heads up display. I was inspired by Arcade games such as Luna Lander, and movies like Tron. Similar to car restoration projects, I wanted to give the retro feel but with the modern conveniences (like tool tips for usability).
+
 ![Neon blue heads up display](https://github.com/SimpsonRoss/battleships/blob/main/resources/game-done-gif.gif)
 ![Computer screen from the Tron remake](https://github.com/SimpsonRoss/battleships/blob/main/resources/game-done-gif.gif)
 
@@ -164,7 +188,6 @@ This diagram shows the iterations my game went through as I worked through the p
 ![Graphic timeline of my battleships project](https://github.com/SimpsonRoss/battleships/blob/main/resources/game-done-gif.gif)
 
 
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Biggest Challenge
@@ -179,11 +202,34 @@ Evolutions of the AI:
 
 I'd like to wipe out step four and amend the AI opponent so that it can remember possible ship locations and return to hunt them. For now though it makes the opponent challenging and from feedback it encourages people to continue playing.
 
-## Mistakes
-
 ## User Feedback
+- [x] Upon landing on the game page, users weren't clear on where to click
+- [x] Users weren't clear on what the weapons would do
+- [x] Users found it hard to discern when it was their turn to go
+- [x] Users complained that the weapons were far from the board
+- [ ] Some users mentioned that the nuke is over-powered
+- [ ] Users mentioned that the AI sometimes loses track of ships
+- [ ] Users asked for a mascot or a tamogotchi style alien.
+  * I was skeptical but people seemed to like it
 
 ## Next Steps
+- Improve the AI so it feels more natural as an opponent
+- I'd like to have some hover shading that displays where the special weapons will affect
+- I'd like to add some subtle sound effects
+- Animate the game board, and add tile flip effects
+
+## Wins
+- People enjoy playing the game! I aimed to make a game that was fun to play, and from the user feedback it seems like that is the case.
+- I managed to make an AI that is tough to beat.
+- I was able to implement a lot of my nice-to-have features.
+- I learnt a lot about how to tie together design, animation and software engineering.
+
+## Mistakes / Bugs
+- I didn't standardise my colors in CSS, and therefore made more work for myself
+- I didn't always use classes effectively in CSS which led to repetition
+- I did some quick coding and ended up with some repetition that could be consolidated
+- I underestimated the work I would be able to do and so didn't plan thoroughly for all functionality
+
 
 ## Key Learnings
 - Consider classes and object more in planning
