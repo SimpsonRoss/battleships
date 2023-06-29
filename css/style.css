@@ -237,6 +237,7 @@ button:hover {
   letter-spacing: .15em;
   align-items: center;
   height: 32vmin;
+  width: 64vmin;
   padding: 5vmin;
   border-radius: 4vmin;
   color: rgb(110, 239, 240);
@@ -446,6 +447,7 @@ button:hover {
     font-size: 2vmin;
     padding: 0;
     margin: .5vmin;
+    width: 55vmin;
 
   }
 
