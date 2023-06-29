@@ -164,14 +164,14 @@ Pseudocode:
 
 Here is the initial sketch of the game. I used this to then draft out the basic grid layout for my mobile and desktop CSS. I'm happy with how close to the original design I stayed. I decided against using sprites for the ships in the end, as it didn't seem to fit with the simplistic retro aesthetic.
 
-![Wireframe of my Battleships game](https://github.com/SimpsonRoss/battleships/blob/main/resources/game-done-gif.gif)
+![Wireframe of my Battleships game](https://github.com/SimpsonRoss/battleships/blob/main/resources/wireframe.png)
 
 ## Aesthetic Inspiration
 
 I wanted to give the game a retro arcade feel, with a simple neon heads up display. I was inspired by Arcade games such as Luna Lander, and movies like Tron. Similar to car restoration projects, I wanted to give the retro feel but with the modern conveniences (like tool tips for usability).
 
-![Neon blue heads up display](https://github.com/SimpsonRoss/battleships/blob/main/resources/game-done-gif.gif)
-![Computer screen from the Tron remake](https://github.com/SimpsonRoss/battleships/blob/main/resources/game-done-gif.gif)
+![Neon blue heads up display](https://github.com/SimpsonRoss/battleships/blob/main/resources/aesthetic-inspiration.png)
+![Computer screen from the Tron remake](https://github.com/SimpsonRoss/battleships/blob/main/resources/tron-inspiration.png)
 
 ## MVP - Minimum Viable Product
 
@@ -195,13 +195,13 @@ I wanted to give the game a retro arcade feel, with a simple neon heads up displ
 
 To keep my project on track I built a product backlog and worked through the cards all week. I approached the MVP items first and once they were completed I approached the nice to have items. I also met with tutors and conducted user research and took any user stories that popped up and added them in the backlog.
 
-![Gif of my Trello Sprint Board](https://github.com/SimpsonRoss/battleships/blob/main/resources/game-done-gif.gif)
+![Gif of my Trello Sprint Board](https://github.com/SimpsonRoss/battleships/blob/main/resources/trello.png)
 
 ## Timeline
 
 This diagram shows the iterations my game went through as I worked through the project week.
 
-![Graphic timeline of my battleships project](https://github.com/SimpsonRoss/battleships/blob/main/resources/game-done-gif.gif)
+![Graphic timeline of my battleships project](https://github.com/SimpsonRoss/battleships/blob/main/resources/timeline.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
