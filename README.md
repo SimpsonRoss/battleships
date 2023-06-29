@@ -52,8 +52,8 @@
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://imgur.com/a/DBWltt7)
-[Imgur](https://i.imgur.com/rUvN5f4.gifv)
+[![Product Name Screen Shot][product-screenshot]](https://imgur.com/a/DBWltt7](https://github.com/SimpsonRoss/battleships/blob/main/resources/game-done-gif.gif))
+
 
 This application is a space themed Battleships game, where the player represents the human race in a fight against an ‘alien’ AI opponent. It’s a twist on the original Battleships game, but it incorporates some new features such as cannon, laser and nuclear weapons and an animated alien mascot.
 
