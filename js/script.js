@@ -1,5 +1,4 @@
 /*----- constants -----*/
-//Call AUDIO.play to trigger this -> const AUDIO = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-simple-countdown-922.mp3');
 const ROWS = 6;
 const COLS = 10;
 const AI_DELAY = 2000; //the time delay for the AI to take its turn 
@@ -44,8 +43,6 @@ const ANIMATIONS = {
   idle: ['alienIdle1', 'alienIdle2', 'alienIdle3', 'alienIdle4'],
 }
 
-
-
 /*----- state variables -----*/
 let computerBoardArr;
 let computerFleet;
@@ -65,7 +62,6 @@ let flashingShuffle;
 let startFlashing;
 let flashingStart;
 
-
 /*----- cached elements  -----*/
 const computerBoard = document.getElementById('computerBoard');
 const playerBoard = document.getElementById('playerBoard');
@@ -81,7 +77,6 @@ const cannonBtn = document.getElementById('playerCannon');
 const laserBtn = document.getElementById('playerLaser');
 const nukeBtn = document.getElementById('playerNuke');
 const alien = document.getElementById('alien');
-
 
 /*----- event listeners -----*/
 computerBoard.addEventListener('click', boardClick);
@@ -126,16 +121,20 @@ function init() {
   COMPWEAPONS.laser = 2;
   COMPWEAPONS.nuke = 0;
 
-
+  //generating new board
   generateBoard(computerBoard, false);
   generateBoard(playerBoard, true);
 
+  // clearing classed from playerBoard 
   Array.from(playerBoard.children).forEach(cell => {
     cell.classList.remove('horizontalFront', 'horizontalRear', 'verticalFront', 'verticalRear');
   });
+  // clear classes from computerBoard
   Array.from(computerBoard.children).forEach(cell => {
-    cell.classList.remove('horizontalFront', 'horizontalRear', 'verticalFront', 'verticalRear');
+    cell.classList.remove('horizontalFront', 'horizontalRear', 'verticalFront', 'verticalRear', 'horizontalFrontTemp', 'horizontalRearTemp', 'verticalFrontTemp', 'verticalRearTemp');
   });
+
+
   placeShipsOnBoard(playerFleet, playerBoardArr);
   placeShipsOnBoard(computerFleet, computerBoardArr);
   computerFleetHealth = 100;
@@ -143,9 +142,8 @@ function init() {
   lastHit = [null];
   lastDirection = [null];
 
-
+  //triggering some helpful info for players to follow
   setTimeout(miniTutorial, 4000);
-
 
   render();
 }
@@ -160,7 +158,6 @@ function flashShuffleButton() {
   shuffleBtn.style.backgroundColor === "rgb(110, 239, 240)" ?
     shuffleBtn.style.backgroundColor = "" :
     shuffleBtn.style.backgroundColor = "rgb(110, 239, 240)";
-
   if (shuffleFlashing === false) {
     clearInterval(flashingShuffle);
     shuffleBtn.style.backgroundColor = "";
@@ -173,32 +170,29 @@ function flashStartButton() {
   startBtn.style.backgroundColor === "rgb(110, 239, 240)" ?
     startBtn.style.backgroundColor = "" :
     startBtn.style.backgroundColor = "rgb(110, 239, 240)";
-
   if (startFlashing === false) {
     clearInterval(flashingStart);
     startBtn.style.backgroundColor = "";
   }
-
   render();
 }
 
+// function to select a random Idle animation
 function selectRandomIdle() {
   if (winner !== null) { return };
   let randomIdle = ANIMATIONS.idle[Math.floor(Math.random() * ANIMATIONS.idle.length)];
   alien.src = `images/alien/${randomIdle}.gif`;
 }
 
+// function to select a random Celebration animation
 function selectRandomCelebration() {
   if (winner !== null) { return };
   let randomCelebration = ANIMATIONS.celebration[Math.floor(Math.random() * ANIMATIONS.celebration.length)];
   alien.src = `images/alien/${randomCelebration}.gif`;
 }
 
-
-
 function startTurns() {
-  // if the game is not in progress, start it
-
+  //stop the buttons from flashing
   shuffleFlashing = false;
   startFlashing = false;
 
@@ -215,27 +209,28 @@ function startTurns() {
     render();
     messageEl.innerText = "Return at your peril";
     selectRandomIdle();
-
   }
-
 }
 
+// function that deals with the player clicking on the computer's board
 function boardClick(evt) {
-  // Guards:
-  // returns without processing, if someone has won already or it's a tie
+
+  // guard whichreturns without processing, if someone has won already or it's a tie
   if (winner !== null || turn === 0) {
     return;
   }
-
+  
+  // gets the coordinates of the square by parsing the id
   const idOfSquare = evt.target.id.slice(2).split('r');
-  //console.log(idOfSquare);
   const colIdx = parseInt(idOfSquare[0]);
   const rowIdx = parseInt(idOfSquare[1]);
 
 
   if (turn === 1 && evt.target.id.startsWith('C')) {
+    
+    /*----- CANNON -----*/
     if (selectedWeapon === 'CANNON') {
-      /*----- CANNON -----*/
+      
       if (turn === 1 && evt.target.id.startsWith('C')) {
         if (computerBoardArr[colIdx][rowIdx] < 0) {
           //console.log('not valid');
@@ -251,7 +246,6 @@ function boardClick(evt) {
 
           //HIT
         } else if (computerBoardArr[colIdx][rowIdx] === 1) {
-
           messageEl.innerHTML = "CANNON HITS!";
           //console.log('player gets a hit')
           computerBoardArr[colIdx][rowIdx] -= 2;
@@ -260,13 +254,9 @@ function boardClick(evt) {
           checkIfSunk(computerFleet, computerBoardArr)
         }
       }
-
     }
+     /*----- LASER -----*/
     else if (selectedWeapon === 'LASER') {
-
-      /*----- LASER -----*/
-
-
 
       // On player's turn, interact with computer's board
       if (turn === 1 && evt.target.id.startsWith('C')) {
@@ -278,7 +268,6 @@ function boardClick(evt) {
           console.log('no empty cells in the column to hit');
           return;
         }
-
         let hitCount = 0; // to count the number of hits
 
         // Modify cells in the column
@@ -298,36 +287,32 @@ function boardClick(evt) {
         computerFleetHealth -= (6 * hitCount);
         checkIfSunk(computerFleet, computerBoardArr);
       }
-
     }
+    /*----- NUKE -----*/
     else if (selectedWeapon === 'NUKE') {
-      /*----- NUKE -----*/
-
-
+      
       if (turn === 1 && evt.target.id.startsWith('C')) {
-
         let hitCount = 0; // to count the number of hits
-
-        // Calculate the indices of cells around the clicked cell in the pattern
+        // calculate the indices of cells around the clicked cell in the pattern
         const indices = [
           [colIdx, rowIdx - 2], [colIdx - 1, rowIdx - 1], [colIdx, rowIdx - 1], [colIdx + 1, rowIdx - 1],
           [colIdx - 2, rowIdx], [colIdx - 1, rowIdx], [colIdx, rowIdx], [colIdx + 1, rowIdx], [colIdx + 2, rowIdx],
           [colIdx - 1, rowIdx + 1], [colIdx, rowIdx + 1], [colIdx + 1, rowIdx + 1], [colIdx, rowIdx + 2]
         ];
 
-        // Iterate over each index pair
+        // uterate over each index pair
         for (let i = 0; i < indices.length; i++) {
           const [col, row] = indices[i];
           console.log(col, row)
-          // Check if index pair is valid
+          // check if index pair is valid
           if (col >= 0 && col < computerBoardArr.length && row >= 0 && row < computerBoardArr[0].length) {
-            // Decrease by 2 for hits
+            // decrease by 2 for hits
             if (computerBoardArr[col][row] === 1) {
               computerBoardArr[col][row] -= 2;
               messageEl.innerHTML = "NUCLEAR DECIMATION!!";
               hitCount++;
             }
-            // Decrease by 2 for misses
+            // decrease by 2 for misses
             else if (computerBoardArr[col][row] === 0) {
               computerBoardArr[col][row] -= 2;
             }
@@ -338,15 +323,12 @@ function boardClick(evt) {
         computerFleetHealth -= (6 * hitCount);
         checkIfSunk(computerFleet, computerBoardArr);
       }
-
     }
   }
-
-  //Check for winner
   grantNukes();
   winner = getWinner();
   render();
-  //Trigger the Computer to take it's turn after a 2.5 second delay
+  //Trigger the Computer to take it's turn after a delay
   setTimeout(computerTurnAI, AI_DELAY);
 }
 
@@ -357,7 +339,6 @@ function computerTurnAI() {
   if (winner !== null) {
     return;
   }
-
 
   let randomRow = Math.floor(Math.random() * playerBoardArr[0].length);
   let randomCol = Math.floor(Math.random() * playerBoardArr.length);
@@ -377,19 +358,12 @@ function computerTurnAI() {
         [0, -1], // Up
       ];
 
-
       const [lastHitCol, lastHitRow] = lastHit.at(-1);
       console.log(`last hit array: ${[lastHitCol, lastHitRow]}`);
 
       if (lastHit.at(-2) !== null && lastHit.at(-1) !== null && lastHit.length > 1) {
         console.log(`Generating last Direction`)
 
-        // for (let i = 0; i < 2; i++) {
-        //   console.log(`Calculating ${lastHit.at(-2)} - ${lastHit.at(-1)}`)
-        //   const difference = lastHit.at(-2) - lastHit.at(-1);
-        //   console.log(`Result: ${difference} (direction)`)
-        //   lastDirection.push(difference);
-        // }
         lastDirection = [];
         for (let i = 0; i < 2; i++) {
           console.log(`Calculating ${lastHit[lastHit.length - 1][i]} - ${lastHit[lastHit.length - 2][i]}`);
@@ -398,7 +372,6 @@ function computerTurnAI() {
           lastDirection.push(difference);
         }
         console.log(`Result: ${[lastDirection]} (direction)`);
-
       }
 
       const result = directions.some(direction =>
@@ -407,7 +380,6 @@ function computerTurnAI() {
 
       console.log(`lastdirection is not null?: ${lastDirection.at(-1) !== null}`)
       console.log(`lastdirection is a valid direction: ${result}`)
-
 
       if (lastDirection.at(-1) !== null && result) {
         console.log('has a last direction')
@@ -428,11 +400,8 @@ function computerTurnAI() {
         directions.sort(() => Math.random() - 0.5);
         console.log(directions)
 
-
         for (let i = 0; i < 4; i++) {
-
           const [colInc, rowInc] = directions[i];
-
           const newCol = lastHitCol + colInc;
           const newRow = lastHitRow + rowInc;
           console.log(`trying direction ${i}`);
@@ -446,7 +415,6 @@ function computerTurnAI() {
             console.log(`newCol: ${newCol} newRow: ${newRow}`);
             randomRow = newRow;
             randomCol = newCol;
-
             break;
           }
         }
@@ -455,12 +423,12 @@ function computerTurnAI() {
 
     while (isValidCell(randomCol, randomRow) === false) {
       console.log('randomising');
-
-      //let advantage = Math.random() < 0.5 ? true : false;
+      // option to give the AI an augmented advantage which makes it more competitive
       let advantage = true;
-      if (playerFleetHealth < 100 && advantage === true) {
+      if (playerFleetHealth < 100 && advantage) {
         console.log('ADVANTAGE GIVEN!!!!!');
-        // FIND THE REMAINING UNBOMBED PLAYER SHIP LOCATIONS
+
+        // find the locations of unsunk player ships
         const idOfSquare = findRandomNonSunk()
         const [unSunkCol, unSunkRow] = idOfSquare;
         console.log(`type of unSunkCol ${typeof unSunkCol} + type of unSunkRow ${typeof unSunkRow}`);
@@ -470,16 +438,15 @@ function computerTurnAI() {
       } else {
         randomCol = Math.floor(Math.random() * playerBoardArr.length);
         randomRow = Math.floor(Math.random() * playerBoardArr[0].length);
-
       }
-
     }
 
     if (playerBoardArr[randomCol][randomRow] === 0) {
       console.log('miss');
       turn *= -1;
       playerBoardArr[randomCol][randomRow] -= 2;
-      lastDirection = [null];  // Clear last direction on miss
+      // clear last direction if there's a miss
+      lastDirection = [null]; 
     } else if (playerBoardArr[randomCol][randomRow] === 1) {
       console.log('hit');
       playerBoardArr[randomCol][randomRow] -= 2;
@@ -487,21 +454,22 @@ function computerTurnAI() {
 
       if (checkIfSunk(playerFleet, playerBoardArr)) {
         console.log('sunk');
-        lastHit.push[null];  // Clear last direction and last hit when a ship is sunk
+        // clear last direction if the ship is sunk
+        lastHit.push[null]; 
       } else {
         console.log('not sunk');
-        //lastDirection.push(difference)
-        lastHit.push([randomCol, randomRow]); // Save this hit
+        // record the last hit
+        lastHit.push([randomCol, randomRow]);
       }
-
       setTimeout(computerTurnAI, AI_DELAY);
     }
-
     winner = getWinner();
     grantNukes();
     render();
   }
 }
+
+// function that checks if the cell is a valid choice for the AI to attack
 function isValidCell(col, row) {
   console.log(`checking if ${[col, row]} is valid`)
   return (
@@ -515,6 +483,7 @@ function isValidCell(col, row) {
   );
 }
 
+// function that finds a random coordinate of an unsunk ship
 function findRandomNonSunk() {
   const nonSunk = playerFleet.flat().filter(location => !sunkenLocations.includes(location));
   console.log(nonSunk);
@@ -526,11 +495,11 @@ function findRandomNonSunk() {
 }
 
 
-
 function createEmptyBoard() {
   return Array(COLS).fill(null).map(() => Array(ROWS).fill(0));
 }
 
+// generates the boards of divs based on the player arrays
 function generateBoard(board, isPlayerBoard, rows = ROWS, columns = COLS) {
   for (let row = 0; row < rows; row++) {
     for (let column = 0; column < columns; column++) {
@@ -539,14 +508,12 @@ function generateBoard(board, isPlayerBoard, rows = ROWS, columns = COLS) {
       let columnId = `${prefix}c${String(column)}`;
       let rowId = `r${String(row)}`;
       elColumn.id = `${columnId}${rowId}`;
-
       board.appendChild(elColumn);
     }
   }
 }
 
 function render() {
-
   renderBoard(computerBoardArr, false, COMPCOLORS);
   renderBoard(playerBoardArr, true, PLAYERCOLORS);
   renderControls();
@@ -568,7 +535,6 @@ function renderWeaponButtons() {
   if (selectedWeapon === 'NUKE' && PLAYERWEAPONS.nuke <= 0) {
     selectedWeapon = 'CANNON';
   }
-
   if (selectedWeapon === 'CANNON') {
     cannonBtn.style.backgroundColor = 'blueviolet';
     cannonBtn.style.border = '.5vmin inset rgb(110, 239, 240)'
@@ -594,10 +560,10 @@ function renderWeaponButtons() {
 }
 
 function renderBoard(boardArr, isPlayerBoard, Colors) {
-  // I'm using the prefixes P = player C = computer to amend the ids for each cell div. 
+  // using the prefixes P = player C = computer to amend the ids for each cell div. 
   const prefix = isPlayerBoard ? 'P' : 'C';
-  boardArr.forEach(function (colArr, colIdx) {
-    colArr.forEach(function (cellVal, rowIdx) {
+  boardArr.forEach((colArr, colIdx) => {
+    colArr.forEach((cellVal, rowIdx) => {
       const cellId = `${prefix}c${colIdx}r${rowIdx}`;
       const cellEl = document.querySelector(`#${cellId}`);
       cellEl.style.backgroundColor = `${Colors[cellVal]}`;
@@ -621,16 +587,14 @@ function grantNukes() {
 
 function getWinner() {
   // flattens the whole array and then checks if every cell is zero or less 
-  // i.e. the board owner has no ships and has lost 
+  // i.e. the board owner has no ships, and so has lost 
   if (computerBoardArr.flat().every(cell => cell <= 0)) {
-    //console.log('humans win');
     alien.src = `images/alien/alienGrave.png`;
     startFlashing = true;
     flashingStart = setInterval(flashStartButton, 500);
     render();
     return 1;
   } else if (playerBoardArr.flat().every(cell => cell <= 0)) {
-    //console.log('aliens win');
     alien.src = `images/alien/alienCelebration5.gif`;
     startFlashing = true;
     flashingStart = setInterval(flashStartButton, 500);
@@ -638,10 +602,10 @@ function getWinner() {
     return -1;
   }
   // If we haven't returned yet, there's no winner
-  //console.log('game is still in play');
   return null;
 }
 
+// renders a border around the board of whoever's turn it is
 function renderTurnIndicator() {
   if (turn === 1) {
     computerBoard.classList.add('computer-active');
@@ -655,35 +619,29 @@ function renderTurnIndicator() {
   }
 }
 
+// renders the fleet health out of 100% for each player
 function renderFleetHealth() {
   computerHealthDisplay.innerText = computerFleetHealth > 0 ? `${computerFleetHealth}%` : `0%`;
   playerHealthDisplay.innerText = playerFleetHealth > 0 ? `${playerFleetHealth}%` : `0%`;
 }
 
+// renders how many of each weapon the player has remaining
 function renderWeaponCounters() {
   cannonCounter.innerText = PLAYERWEAPONS.cannon;
   laserCounter.innerText = PLAYERWEAPONS.laser;
   nukeCounter.innerText = PLAYERWEAPONS.nuke;
-
 }
-
 
 function renderMessage() {
   if (turn === 0) { return }
   if (winner !== null) {
     console.log("SETTING WIN TIMEOUT")
-    // setTimeout(() => {
-    //   messageEl.innerHTML = `${winner === 1 ? TURNS.player : TURNS.computer} WINS!!!`;
-    // }, 700);
     messageEl.innerHTML = `${winner === 1 ? TURNS.player : TURNS.computer} WINS!!!`;
-    //scoreBoard.innerHTML = `<strong>SCORES: ${player1}: ${player1Score} | ${player2}: ${player2Score}</strong>`;
     //else, the game is in play
   } else {
     setTimeout(() => {
       messageEl.innerHTML = `${turn === 1 ? TURNS.player : TURNS.computer}'S TURN`;
     }, 700);
-
-    //scoreBoard.innerHTML = `<strong>SCORES: ${player1}: ${player1Score} | ${player2}: ${player2Score}</strong>`;
   }
 };
 
@@ -770,20 +728,14 @@ function placeShipsOnBoard(fleet, board) {
 }
 
 function checkIfSunk(fleet, boardArr) {
-  //console.log('checking for a sunken ship')
-
   fleet.forEach(ship => {
-    //console.log(`ship: ${ship}`);
     const shipSunk = ship.every(shipSection => {
       // creates an array with the column value at 0, and row value at 1
       const idOfSquare = shipSection.slice(2).split('r');
-      //console.log(`id of square: ${idOfSquare}`);
-      //console.log(`boardArr square value: ${boardArr[idOfSquare[0]][idOfSquare[1]]}`);
       return boardArr[idOfSquare[0]][idOfSquare[1]] === -1;
     })
-    //console.log(`shipSunk: ${shipSunk}`);
 
-    if (shipSunk === true) {
+    if (shipSunk) {
       if (!winner) {
         selectRandomCelebration();
         setTimeout(selectRandomIdle, 3000)

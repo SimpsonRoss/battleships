@@ -1,7 +1,6 @@
 * {
   box-sizing: border-box;
   margin: 0;
-  /* border: 1px solid red; */
 }
 
 :root {
@@ -18,7 +17,6 @@ body {
   justify-content: center;
   align-items: center;
   background-color: black;
-
   color: rgb(101, 231, 233);
 }
 
@@ -32,7 +30,6 @@ a {
   font-size: 7.8vmin;
   text-align: center;
 }
-
 
 #main {
   width: 95vmin;
@@ -87,15 +84,13 @@ a {
 }
 
 #weaponDashboard {
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 300;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  font-size: 2vmin;
-  font-weight: bold;
+
+
 
   border-radius: 2vmin;
   color: rgb(110, 239, 240);
