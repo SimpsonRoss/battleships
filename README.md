@@ -6,25 +6,17 @@
 <details>
   <summary>Table of Contents</summary>
   <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
+    <li><a href="#about">About The Project</a></li>
+    <li><a href="#website">Website</a>
+    <li><a href="#getting-started">Getting Started</a></li>
+    <li><a href="#project-brief">Project Brief</a></li>
+    <li><a href="#planning">Planning</a></li>
+    <li><a href="#wireframe">Wireframe</a></li>
+    <li><a href="#timeline">Timeline</a></li>
+    <li><a href="#biggest-challenge">Biggest Challenge</a></li>
+    <li><a href="#mistakes-and-bugs">Mistakes and Bugs</a></li>
+    <li><a href="#key-learnings">Key Learnings</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -50,15 +42,15 @@ For this project we were tasked to choose and game and complete it using these t
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- GETTING STARTED -->
+<!-- WEBSITE -->
 
-## How to Play
+## Website
 
 [PLAY NOW](https://simpsonross.github.io/battleships/) There's no set-up required and the game is device responsive.
 
-<!-- USAGE EXAMPLES -->
+<!-- GETTING STARTED -->
 
-## Usage
+## Getting Started
 
 - [Open the game](https://simpsonross.github.io/battleships/)
 - Shuffle fleet
@@ -248,7 +240,7 @@ I'd like to wipe out step four and amend the AI opponent so that it can remember
 - I was able to implement a lot of my nice-to-have features.
 - I learnt a lot about how to tie together design, animation and software engineering.
 
-## Mistakes / Bugs
+## Mistakes and Bugs
 
 - I didn't standardise my colors in CSS, and therefore made more work for myself
 - I didn't always use classes effectively in CSS which led to repetition
@@ -286,8 +278,6 @@ If you have a suggestion that would make this better, please fork the repo and c
 
 Ross Simpson - [My LinkedIn](https://www.linkedin.com/in/simpsonre/) - thisisrosssimpson@gmail.com
 
-Project Link: [https://github.com/SimpsonRoss/battleships](https://github.com/SimpsonRoss/battleships)
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ACKNOWLEDGMENTS -->
@@ -299,7 +289,7 @@ These resources helped me greatly in the completion of my game, especially when 
 - [CSS Tricks](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
 - [htmlcheatsheet.com](https://htmlcheatsheet.com/)
 - [Img Shields](https://shields.io)
-- [Trello] (https://trello.com/)
+- [Trello](https://trello.com/)
 - [GitHub Pages](https://pages.github.com)
 - [Photopea](https://www.photopea.com/)
 - [EZ gif](https://ezgif.com/)

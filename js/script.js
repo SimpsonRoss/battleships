@@ -224,9 +224,6 @@ function boardClick(evt) {
   const idOfSquare = evt.target.id.slice(2).split('r');
   const colIdx = parseInt(idOfSquare[0]);
   const rowIdx = parseInt(idOfSquare[1]);
-
-
-  if (turn === 1 && evt.target.id.startsWith('C')) {
     
     /*----- CANNON -----*/
     if (selectedWeapon === 'CANNON') {
@@ -324,7 +321,6 @@ function boardClick(evt) {
         checkIfSunk(computerFleet, computerBoardArr);
       }
     }
-  }
   grantNukes();
   winner = getWinner();
   render();
@@ -635,7 +631,6 @@ function renderWeaponCounters() {
 function renderMessage() {
   if (turn === 0) { return }
   if (winner !== null) {
-    console.log("SETTING WIN TIMEOUT")
     messageEl.innerHTML = `${winner === 1 ? TURNS.player : TURNS.computer} WINS!!!`;
     //else, the game is in play
   } else {
